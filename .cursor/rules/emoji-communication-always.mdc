@@ -1,0 +1,74 @@
+---
+description: 
+globs:
+alwaysApply: true
+---
+
+# Emoji Communication Guidelines
+
+## Critical Rules
+
+- Use emojis sparingly and purposefully to enhance readability and engagement
+- Place emojis at the beginning of sections, headings, or key points for visual hierarchy
+- Choose emojis that are universally recognizable and relevant to the technical context
+- Maintain consistency in emoji usage throughout the documentation
+- Never use emojis to replace critical technical terms or important information
+- Limit to one emoji per heading/point to avoid visual clutter
+- Use emojis primarily for:
+  - 📚 Documentation sections and categories
+  - ⚠️ Important warnings or notices
+  - 💡 Tips and best practices
+  - 🎯 Goals and objectives
+  - ✨ New features or highlights
+  - 🔧 Configuration and setup
+  - 🐛 Bug fixes and known issues
+  - 🔒 Security-related information
+  - 🚀 Performance improvements
+  - 📝 Examples and code snippets
+
+## Examples
+
+<example>
+# 📘 Project Documentation
+
+## 🎯 Project Goals
+- Build a scalable microservice architecture
+- Implement robust security measures
+- Optimize application performance
+
+## ⚠️ Prerequisites
+- Node.js 18.x or higher
+- Docker Desktop
+- MongoDB
+
+## 💡 Quick Start
+1. Clone the repository
+2. Install dependencies
+3. Run setup script
+
+## 🔧 Configuration
+Detailed steps for configuring your development environment...
+
+## 🔒 Security Guidelines
+Important security measures and best practices...
+</example>
+
+<example type="invalid">
+# 📘 🚀 ✨ Project Documentation 
+
+## Project Goals 🎯 💪 💯
+- Build a scalable microservice architecture 🏗️
+- Implement robust security measures 🔒 
+- Optimize application performance 🚀 
+
+## Prerequisites ⚠️ ❗ ❕
+- Node.js 18.x or higher 💻
+- Docker Desktop 🐳
+- MongoDB 🗄️
+
+## Quick Start 🏃 💨 
+1. Clone the repository 📥
+2. Install dependencies ⚡
+3. Run setup script 🔄
+</example>
+

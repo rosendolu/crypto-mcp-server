@@ -1,0 +1,46 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+
+
+# List Applied Rules
+
+## Critical Rules
+
+- At the end of EVERY response, list all rules that were applied during the request processing
+- Format the list as a collapsible section titled "Applied Rules 📜"
+- Include the rule name, type (auto/manual/always/agent), and a brief one-line description of how it was used
+- If no rules were applied, still show the section with "No rules were applied in this request"
+- Order rules by their importance and application order
+- Use consistent emoji indicators for different rule types:
+  - 🔄 Auto Rules
+  - 👤 Manual Rules
+  - ⭐ Always Rules
+  - 🤖 Agent Rules
+
+## Examples
+
+<example>
+<details>
+<summary>Applied Rules 📜</summary>
+
+- ⭐ global-rules/emoji-communication-always: Applied for consistent emoji usage in response
+- 🤖 ts-rules/typescript-best-practices-agent: Guided TypeScript code generation
+- 🔄 testing-rules/jest-auto: Applied test naming conventions
+</details>
+</example>
+
+<example type="invalid">
+Applied rules:
+- emoji-communication-always
+- typescript-best-practices-agent
+- jest-auto
+
+Missing:
+- No collapsible section
+- No emojis for rule types
+- No descriptions of how rules were applied
+- Incomplete rule paths
+</example> 

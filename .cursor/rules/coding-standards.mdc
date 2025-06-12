@@ -1,0 +1,222 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Coding Standards
+
+## TypeScript Requirements
+
+**All code must be written in TypeScript**
+- File extensions must be `.ts` or `.tsx`
+- JavaScript files (`.js`, `.jsx`) are prohibited
+- Must properly define types, avoid using `any` type
+- All TypeScript type definitions must be written in dedicated `types.ts` files
+- Prohibit inline type definitions within individual `.ts` files
+- All of code and code comments must be in English
+- Time related operation must use dayjs to simplify code
+- All symbol related description,comments must in format ETH/USDT (except exchanges api)
+
+**Type Definition Standards:**
+
+```typescript
+// ✅ Correct - Define types in types.ts files
+// src/types.ts
+export interface TickerData {
+    symbol: string;
+    price: number;
+    volume: number;
+    timestamp: Date;
+}
+
+export interface OrderBook {
+    bids: [number, number][];
+    asks: [number, number][];
+}
+
+// src/api/market.ts
+import { TickerData, OrderBook } from '@/types';
+
+export async function getTickerPrice(symbol: string): Promise<TickerData> {
+    // implementation
+}
+
+// ❌ Wrong - Do not define types inline in implementation files
+// src/api/market.ts
+interface TickerData {  // This should be in types.ts
+    symbol: string;
+    price: number;
+}
+
+export async function getTickerPrice(symbol: string): Promise<TickerData> {
+    // implementation
+}
+```
+
+## Module Import Standards
+
+**Must use path aliases defined in tsconfig.json**
+
+Based on project configuration in tsconfig.json, must use `@/*` aliases:
+
+```typescript
+// ✅ Correct - Use path aliases
+import { registerPrompts } from '@/api/prompts';
+import logger from '@/utils/logger';
+import { BinanceProvider } from '@/data-providers/binance';
+
+// ❌ Wrong - Do not use relative paths
+import { registerPrompts } from '../api/prompts';
+import logger from '../../utils/logger';
+```
+
+## Logging Standards
+
+**Must use winston logger with splat format**
+
+Project has configured winston logger in src/utils/logger.ts, must follow these standards:
+
+```typescript
+import logger from '@/utils/logger';
+
+// ✅ Correct - Use splat format with appropriate log levels
+logger.error(`Error starting MCP server: %s`, error);
+logger.warn(`Warning: Invalid parameter %s for function %s`, param, functionName);
+logger.info(`Successfully connected to %s exchange`, exchangeName);
+logger.debug(`Processing request with data: %j`, requestData);
+
+// ❌ Wrong - Do not use console or string concatenation
+console.log('Error:', error);
+logger.error('Error starting MCP server: ' + error.message);
+```
+
+**Log Level Usage Standards:**
+- `logger.error()`: System errors, exception handling
+- `logger.warn()`: Warning messages, potential issues
+- `logger.info()`: Critical operation information, business processes
+- `logger.debug()`: Debug information, detailed data
+
+## Modular Architecture Principles
+
+**Strictly organize code following Single Responsibility Principle**
+
+Project directory structure must follow modular design:
+
+```
+src/
+├── api/           # MCP API related functionality
+├── data-providers/ # Data provider integrations
+├── indicators/    # Technical indicator calculations
+├── types/         # Type definitions
+└── utils/         # Utility functions
+```
+
+**Each module must:**
+- Have single, clear responsibility
+- Define clear interfaces
+- Minimize inter-module dependencies
+- Export clear public APIs
+
+## Error Handling Standards
+
+**Must handle all error scenarios with compatibility**
+
+```typescript
+// ✅ Correct error handling pattern
+async function fetchMarketData(symbol: string): Promise<MarketData | null> {
+    try {
+        const response = await api.getMarketData(symbol);
+        logger.info(`Successfully fetched market data for %s`, symbol);
+        return response.data;
+    } catch (error) {
+        logger.error(`Failed to fetch market data for %s: %s`, symbol, error);
+        
+        // Provide fallback solution
+        try {
+            const fallbackData = await getFallbackData(symbol);
+            logger.warn(`Using fallback data for %s`, symbol);
+            return fallbackData;
+        } catch (fallbackError) {
+            logger.error(`Fallback also failed for %s: %s`, symbol, fallbackError);
+            return null;
+        }
+    }
+}
+
+// ✅ Correct MCP error response format
+function handleMCPError(error: Error, operation: string) {
+    logger.error(`MCP operation %s failed: %s`, operation, error);
+    return {
+        error: {
+            code: -32603,
+            message: `Internal error during ${operation}`,
+            data: {
+                details: error.message,
+                timestamp: new Date().toISOString()
+            }
+        }
+    };
+}
+```
+
+**Error Handling Requirements:**
+1. All async operations must use try-catch
+2. Errors must be logged (using logger.error)
+3. Must provide compatible fallback solutions
+4. API errors must return standard JSON-RPC format
+5. Critical errors must include context information
+
+## Code Examples
+
+**Complete function example following all standards:**
+
+```typescript
+import logger from '@/utils/logger';
+import { BinanceProvider } from '@/data-providers/binance';
+import { TickerData } from '@/types/market';
+
+export async function getTickerPrice(symbol: string): Promise<TickerData | null> {
+    try {
+        logger.info(`Fetching ticker price for %s`, symbol);
+        
+        const provider = new BinanceProvider();
+        const ticker = await provider.getTickerPrice(symbol);
+        
+        if (!ticker) {
+            logger.warn(`No ticker data found for %s`, symbol);
+            return null;
+        }
+        
+        logger.info(`Successfully retrieved ticker for %s: %s`, symbol, ticker.price);
+        return ticker;
+        
+    } catch (error) {
+        logger.error(`Error fetching ticker for %s: %s`, symbol, error);
+        
+        // Fallback handling - try alternative data source
+        try {
+            logger.info(`Attempting fallback data source for %s`, symbol);
+            const fallbackTicker = await getFallbackTicker(symbol);
+            logger.warn(`Using fallback ticker data for %s`, symbol);
+            return fallbackTicker;
+        } catch (fallbackError) {
+            logger.error(`All data sources failed for %s: %s`, symbol, fallbackError);
+            return null;
+        }
+    }
+}
+```
+
+## Mandatory Checklist
+
+Before each code commit, must confirm:
+
+- [ ] Use TypeScript (.ts/.tsx files)
+- [ ] All type definitions are placed in dedicated `types.ts` files
+- [ ] No inline type definitions in implementation files
+- [ ] Import statements use `@/*` path aliases
+- [ ] All logging uses winston logger with splat format
+- [ ] Code is properly categorized by module functionality
+- [ ] All error scenarios are handled and logged
+- [ ] Compatible fallback solutions are provided
+- [ ] Error messages contain sufficient debugging context

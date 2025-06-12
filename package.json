@@ -1,0 +1,66 @@
+{
+    "name": "crypto-mcp-server",
+    "version": "1.0.0",
+    "description": "A TypeScript MCP CLI for cryptocurrency technical analysis, supporting Binance Spot.",
+    "main": "dist/index.js",
+    "bin": {
+        "crypto-mcp": "dist/index.js"
+    },
+    "type": "commonjs",
+    "scripts": {
+        "build": "tsc && tsc-alias",
+        "build:watch": "tsc --watch & tsc-alias --watch",
+        "start": "node dist/index.js",
+        "dev": "node --watch-path=dist dist/index.js",
+        "debug": " npx ts-node -r tsconfig-paths/register src/data-providers/binance/__tests__/connection.ts",
+        "inspect": "npx @modelcontextprotocol/inspector crypto-mcp",
+        "test": "vitest run",
+        "test:unit": "vitest run --dir src",
+        "test:integration": "vitest run test/integration"
+    },
+    "keywords": [
+        "cryptocurrency",
+        "MCP",
+        "binance",
+        "technical analysis",
+        "typescript"
+    ],
+    "author": "rosendo",
+    "license": "Apache License 2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rosendolu/crypto-mcp-server"
+    },
+    "files": [
+        "dist",
+        "package.json",
+        "README.md"
+    ],
+    "packageManager": "pnpm@10.6.2",
+    "dependencies": {
+        "@binance/spot": "^5.0.0",
+        "@modelcontextprotocol/sdk": "^1.11.4",
+        "ccxt": "^4.4.88",
+        "dayjs": "^1.11.13",
+        "dotenv": "^16.5.0",
+        "koa": "^3.0.0",
+        "koa-bodyparser": "^4.4.1",
+        "technicalindicators": "^3.1.0",
+        "winston": "^3.17.0",
+        "winston-daily-rotate-file": "^5.0.0",
+        "zod": "^3.24.4"
+    },
+    "devDependencies": {
+        "@types/koa": "^2.15.0",
+        "@types/koa-bodyparser": "^4.3.12",
+        "@types/node": "^22.15.18",
+        "@vitest/ui": "^1.0.0",
+        "nodemon": "^3.1.10",
+        "ts-node": "^10.9.2",
+        "tsc-alias": "^1.8.16",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.8.3",
+        "vitest": "^1.0.0"
+    },
+    "types": "dist/index.d.ts"
+}
