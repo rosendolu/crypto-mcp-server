@@ -90,7 +90,7 @@ CLI 提供以下工具（全部基于 CCXT，支持多交易所）：
 
 CLI 可直接与 MCP 兼容客户端（如 **Cursor**、**Claude** 等，支持 stdio 传输）配合使用：
 
-<a href="https://cursor.com/install-mcp?name=Crypto%20MCP&config=eyJjb21tYW5kIjoibnB4IC15IGNyeXB0by1tY3AiLCJlbnYiOnsiTE9HX0xFVkVMIjoiZGVidWciLCJCSU5BTkNFX0FQSV9LRVkiOiIiLCJCSU5BTkNFX1NFQ1JFVCI6IiIsIkdBVEVfQVBJX0tFWSI6IiIsIkdBVEVfU0VDUkVUIjoiIn19"><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Add Crypto MCP MCP server to Cursor" height="32" /></a>
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=Crypto%20MCP%20Server&config=eyJjb21tYW5kIjoibnB4IC15IGNyeXB0by1tY3Atc2VydmVyIiwiZW52Ijp7IkJJTkFOQ0VfQVBJX0tFWSI6IiIsIkJJTkFOQ0VfU0VDUkVUIjoiIiwiR0FURV9BUElfS0VZIjoiIiwiR0FURV9TRUNSRVQiOiIifX0%3D)
 
 ```json
 {

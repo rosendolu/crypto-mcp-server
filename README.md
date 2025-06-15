@@ -80,8 +80,7 @@ To use the MCP server, you need API credentials from your exchange account (e.g.
 
 If you don't have an account yet:
 
-> Don't have an account? Click to sign up now
-> [<img src="docs/icons/binance.png" alt="Binance" width="28" style="vertical-align:middle;background:#000"/> Binance](https://www.marketwebb.net/activity/referral-entry/CPA?ref=CPA_00568KAJ11)  
+> Don't have an account? Click to sign up now <br/> > [<img src="docs/icons/binance.png" alt="Binance" width="28" style="vertical-align:middle;background:#000"/> Binance](https://www.marketwebb.net/activity/referral-entry/CPA?ref=CPA_00568KAJ11)  
 > [<img src="docs/icons/gate.png" alt="Gate" width="28" style="vertical-align:middle;background:#000;"/> Gate](https://www.gateweb.space/signup/AVFAVws?ref_type=103)
 
 After registering, create an API key and secret in your exchange account dashboard.
@@ -92,7 +91,7 @@ After registering, create an API key and secret in your exchange account dashboa
 
 The CLI can be used directly with an MCP-compatible client, such as **Cursor**, **Claude**, that supports stdio transport:
 
-<a href="https://cursor.com/install-mcp?name=Crypto%20MCP&config=eyJjb21tYW5kIjoibnB4IC15IGNyeXB0by1tY3AiLCJlbnYiOnsiTE9HX0xFVkVMIjoiZGVidWciLCJCSU5BTkNFX0FQSV9LRVkiOiIiLCJCSU5BTkNFX1NFQ1JFVCI6IiIsIkdBVEVfQVBJX0tFWSI6IiIsIkdBVEVfU0VDUkVUIjoiIn19"><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Add Crypto MCP MCP server to Cursor" height="32" /></a>
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=Crypto%20MCP%20Server&config=eyJjb21tYW5kIjoibnB4IC15IGNyeXB0by1tY3Atc2VydmVyIiwiZW52Ijp7IkJJTkFOQ0VfQVBJX0tFWSI6IiIsIkJJTkFOQ0VfU0VDUkVUIjoiIiwiR0FURV9BUElfS0VZIjoiIiwiR0FURV9TRUNSRVQiOiIifX0%3D)
 
 ```json
 {
