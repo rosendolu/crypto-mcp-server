@@ -165,6 +165,10 @@ LOG_LEVEL=info # 可选值：emerg, alert, crit, error, warning, notice, info, d
 -   若所有支持交易所均未配置有效 API 密钥，系统将报错并记录日志。
 -   **支持多种技术指标与策略：** MACD、布林带、KDJ、EMA 等。
 
+## 🤝 商业合作
+
+我们诚挚欢迎各类商业合作与伙伴关系！如果您有意与 Crypto MCP 项目进行商业合作、集成或联合创新，欢迎随时联系。请发送邮件至 rosendofun@gmail.com 与我们洽谈合作机会。
+
 ## 许可证
 
 本项目采用 Apache License 2.0 许可。

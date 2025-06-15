@@ -80,7 +80,7 @@ To use the MCP server, you need API credentials from your exchange account (e.g.
 
 If you don't have an account yet:
 
-> Don’t have an account? Click to sign up now
+> Don't have an account? Click to sign up now
 > [<img src="docs/icons/binance.png" alt="Binance" width="28" style="vertical-align:middle;background:#000"/> Binance](https://www.marketwebb.net/activity/referral-entry/CPA?ref=CPA_00568KAJ11)  
 > [<img src="docs/icons/gate.png" alt="Gate" width="28" style="vertical-align:middle;background:#000;"/> Gate](https://www.gateweb.space/signup/AVFAVws?ref_type=103)
 
@@ -166,6 +166,10 @@ LOG_LEVEL=info # options: emerg, alert, crit, error, warning, notice, info, debu
 -   You can switch the active exchange via configuration or parameters in your application code.
 -   If no valid API credentials are found for any supported exchange, the system will throw an error and log the issue.
 -   **Multiple technical indicators and strategies supported:** MACD, Bollinger Bands, KDJ, EMA, and more.
+
+## 🤝 Business Cooperation
+
+We are actively seeking business partners and collaborators! If you are interested in exploring commercial cooperation, integration, or joint ventures with the Crypto MCP project, we would love to hear from you. Please contact us at rosendofun@gmail.com to discuss potential opportunities.
 
 ## License
 
