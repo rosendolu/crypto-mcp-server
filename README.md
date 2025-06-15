@@ -6,11 +6,11 @@
 
 > ⚠️ **This project is under active development! Features, APIs, and documentation are rapidly evolving. Feedback and contributions are welcome.**
 
-A powerful MCP for cryptocurrency market data, cross-platform trading, arbitrage, kline (candlestick) analysis, portfolio analysis, and more. **Supports multi-exchange, multi-account, and advanced multi-strategy analytics (MACD, Bollinger Bands, KDJ, EMA, etc.)**. Built on [CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file) for robust exchange integration.
+A powerful MCP for cryptocurrency market data, cross-platform trading, arbitrage, kline (candlestick) analysis, portfolio analysis, and more. **Supports multi-exchange, multi-account, and advanced multi-strategy analytics (MACD, Bollinger Bands, KDJ, EMA, etc.)**. Built on CCXT for robust exchange integration.
 
 ## ✨ Features
 
--   🏦 **Multi-Exchange:** Trade and analyze on all major certified exchanges ([CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file) powered)
+-   🏦 **Multi-Exchange:** Trade and analyze on all major certified exchanges CCXT powered)
 -   🔄 **Arbitrage:** Cross-exchange arbitrage and analytics
 -   📈 **Kline/Candlestick Analysis:** Advanced OHLCV and indicator analytics (MACD, Bollinger Bands, KDJ, EMA, and more)
 -   📊 **Portfolio & Position Analysis:** Unified multi-exchange portfolio view
@@ -18,7 +18,18 @@ A powerful MCP for cryptocurrency market data, cross-platform trading, arbitrage
 
 ## 🛠️ Tools
 
-The CLI provides the following tools (all exchange-agnostic, powered by [CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file)):
+![prompts usage](docs/usage.gif)
+
+> 📚 **Prompt Templates Available!**
+>
+> For each tool, you can use ready-made English and Chinese prompt templates to interact with the CLI or compatible clients. See [`docs/tool-prompts.md`](./docs/tool-prompts.md) for a full list of prompt examples and parameter explanations.
+>
+> Example:
+>
+> -   English: `Get the latest price for ETH/USDT on binance.`
+> -   中文: `查询 binance 上 ETH/USDT 的最新价格。`
+
+The CLI provides the following tools (all exchange-agnostic, powered by CCXT:
 
 -   `prices` — Get current price(s) for a symbol or all symbols
     -   Parameters: `symbol?`, `exchange?`
@@ -63,25 +74,39 @@ The CLI provides the following tools (all exchange-agnostic, powered by [CCXT](h
 
 ### Usage
 
-The CLI can be used directly with an MCP-compatible client, such as **Cursor**,**Claude**, that supports stdio transport:
+#### 1️⃣ Get Your Exchange API Key & Secret
+
+To use the MCP server, you need API credentials from your exchange account (e.g., Binance, Gate, etc.).
+
+If you don't have an account yet:
+
+> Don’t have an account? Click to sign up now
+> [<img src="docs/icons/binance.png" alt="Binance" width="28" style="vertical-align:middle;background:#000"/> Binance](https://www.marketwebb.net/activity/referral-entry/CPA?ref=CPA_00568KAJ11)  
+> [<img src="docs/icons/gate.png" alt="Gate" width="28" style="vertical-align:middle;background:#000;"/> Gate](https://www.gateweb.space/signup/AVFAVws?ref_type=103)
+
+After registering, create an API key and secret in your exchange account dashboard.
+
+> To place an order, write permission is required.
+
+#### 2️⃣ Add the MCP Tool
+
+The CLI can be used directly with an MCP-compatible client, such as **Cursor**, **Claude**, that supports stdio transport:
 
 <a href="https://cursor.com/install-mcp?name=Crypto%20MCP&config=eyJjb21tYW5kIjoibnB4IC15IGNyeXB0by1tY3AiLCJlbnYiOnsiTE9HX0xFVkVMIjoiZGVidWciLCJCSU5BTkNFX0FQSV9LRVkiOiIiLCJCSU5BTkNFX1NFQ1JFVCI6IiIsIkdBVEVfQVBJX0tFWSI6IiIsIkdBVEVfU0VDUkVUIjoiIn19"><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Add Crypto MCP MCP server to Cursor" height="32" /></a>
 
-```
+```json
 {
-  "Crypto MCP": {
-    "command": "npx",
-    "args": ["-y", "crypto-mcp"],
-    "env": {
-      "LOG_LEVEL": "debug",
-      "BINANCE_API_KEY": "",
-      "BINANCE_SECRET": "",
-      "GATE_API_KEY": "",
-      "GATE_SECRET": ""
+    "Crypto MCP Server": {
+        "command": "npx",
+        "args": ["-y", "crypto-mcp-server"],
+        "env": {
+            "BINANCE_API_KEY": "",
+            "BINANCE_SECRET": "",
+            "GATE_API_KEY": "",
+            "GATE_SECRET": ""
+        }
     }
-  }
 }
-
 ```
 
 ### Environment Variables
@@ -102,7 +127,7 @@ GATE_SECRET=your_gate_secret
 # ...repeat for each supported exchange below
 ```
 
-#### Supported Exchanges ([CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file) Certified)
+#### Supported Exchanges (CCXT Certified)
 
 -   binance
 -   binancecoinm
@@ -136,7 +161,7 @@ LOG_LEVEL=info # options: emerg, alert, crit, error, warning, notice, info, debu
 
 #### Multi-Exchange & Multi-Strategy Support
 
--   The system supports all [CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file) certified exchanges for both public and private endpoints.
+-   The system supports all CCXT certified exchanges for both public and private endpoints.
 -   At least one exchange's API Key/Secret must be configured for the system to start.
 -   You can switch the active exchange via configuration or parameters in your application code.
 -   If no valid API credentials are found for any supported exchange, the system will throw an error and log the issue.

@@ -4,11 +4,11 @@
 
 > ⚠️ **本项目正在积极开发中！功能、API 和文档都在快速迭代，欢迎反馈和贡献。**
 
-一个强大的 MCP 工具，支持加密货币市场数据、跨平台交易、套利、K 线（蜡烛图）分析、投资组合分析等。**支持多交易所、多账户和多策略分析（MACD、布林带、KDJ、EMA 等）**。基于 [CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file) 实现强大的交易所集成。
+一个强大的 MCP 工具，支持加密货币市场数据、跨平台交易、套利、K 线（蜡烛图）分析、投资组合分析等。**支持多交易所、多账户和多策略分析（MACD、布林带、KDJ、EMA 等）**。基于 CCXT 实现强大的交易所集成。
 
 ## ✨ 功能亮点
 
--   🏦 **多交易所支持：** 可在所有主流认证交易所进行交易和分析（基于 [CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file)）
+-   🏦 **多交易所支持：** 可在所有主流认证交易所（CCXT powered）进行交易和分析
 -   🔄 **套利：** 跨交易所套利与分析
 -   📈 **K 线/蜡烛图分析：** 高级 OHLCV 与技术指标分析（MACD、布林带、KDJ、EMA 等）
 -   📊 **投资组合与持仓分析：** 多交易所统一投资组合视图
@@ -16,7 +16,18 @@
 
 ## 🛠️ 工具
 
-CLI 提供以下工具（全部基于 [CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file)，支持多交易所）：
+![prompts usage](./usage.gif)
+
+> 📚 **Prompt 模板已上线！**
+>
+> 每个工具都配有中英文 prompt 模板，便于你在 CLI 或兼容客户端中直接调用。完整的 prompt 示例和参数说明请见 [`docs/tool-prompts.md`](./tool-prompts.md)。
+>
+> 示例：
+>
+> -   English: `Get the latest price for ETH/USDT on binance.`
+> -   中文: `查询 binance 上 ETH/USDT 的最新价格。`
+
+CLI 提供以下工具（全部基于 CCXT，支持多交易所）：
 
 -   `prices` — 获取某个币对或全部币对的当前价格
     -   参数: `symbol?`, `exchange?`
@@ -61,23 +72,38 @@ CLI 提供以下工具（全部基于 [CCXT](https://github.com/ccxt/ccxt?tab=re
 
 ### 使用方法
 
+#### 1️⃣ 获取交易所 API Key & Secret
+
+使用 MCP 服务前，你需要在交易所账户（如 Binance、Gate 等）获取 API 密钥。
+
+如果你还没有交易所账号：
+
+> 没有账户？点击下方立即注册
+> [<img src="../docs//icons/binance.png" alt="Binance" width="28" style="vertical-align:middle;background:#000"/> Binance](https://www.marketwebb.net/activity/referral-entry/CPA?ref=CPA_00568KAJ11)  
+> [<img src="../docs/icons/gate.png" alt="Gate" width="28" style="vertical-align:middle;background:#000;"/> Gate](https://www.gateweb.space/signup/AVFAVws?ref_type=103)
+
+注册后，请在交易所后台创建 API key 和 secret。
+
+> 下单操作需开通写权限。
+
+#### 2️⃣ 添加 MCP 工具
+
 CLI 可直接与 MCP 兼容客户端（如 **Cursor**、**Claude** 等，支持 stdio 传输）配合使用：
 
 <a href="https://cursor.com/install-mcp?name=Crypto%20MCP&config=eyJjb21tYW5kIjoibnB4IC15IGNyeXB0by1tY3AiLCJlbnYiOnsiTE9HX0xFVkVMIjoiZGVidWciLCJCSU5BTkNFX0FQSV9LRVkiOiIiLCJCSU5BTkNFX1NFQ1JFVCI6IiIsIkdBVEVfQVBJX0tFWSI6IiIsIkdBVEVfU0VDUkVUIjoiIn19"><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Add Crypto MCP MCP server to Cursor" height="32" /></a>
 
-```
+```json
 {
-  "Crypto MCP": {
-    "command": "npx",
-    "args": ["-y", "crypto-mcp"],
-    "env": {
-      "LOG_LEVEL": "debug",
-      "BINANCE_API_KEY": "",
-      "BINANCE_SECRET": "",
-      "GATE_API_KEY": "",
-      "GATE_SECRET": ""
+    "Crypto MCP Server": {
+        "command": "npx",
+        "args": ["-y", "crypto-mcp-server"],
+        "env": {
+            "BINANCE_API_KEY": "",
+            "BINANCE_SECRET": "",
+            "GATE_API_KEY": "",
+            "GATE_SECRET": ""
+        }
     }
-  }
 }
 ```
 
@@ -99,7 +125,7 @@ GATE_SECRET=your_gate_secret
 # ...为下方所有支持的交易所重复配置
 ```
 
-#### 支持的交易所（[CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file) 认证）
+#### 支持的交易所（CCXT 认证）
 
 -   binance
 -   binancecoinm
@@ -133,7 +159,7 @@ LOG_LEVEL=info # 可选值：emerg, alert, crit, error, warning, notice, info, d
 
 #### 多交易所与多策略支持
 
--   系统支持所有 [CCXT](https://github.com/ccxt/ccxt?tab=readme-ov-file) 认证交易所的公私接口。
+-   系统支持所有 CCXT 认证交易所的公私接口。
 -   至少需配置一个交易所的 API Key/Secret，系统才能启动。
 -   可通过配置或参数切换当前活跃交易所。
 -   若所有支持交易所均未配置有效 API 密钥，系统将报错并记录日志。

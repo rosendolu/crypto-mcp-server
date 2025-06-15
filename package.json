@@ -4,7 +4,7 @@
     "description": "A TypeScript MCP CLI for cryptocurrency technical analysis, supporting Binance Spot.",
     "main": "dist/index.js",
     "bin": {
-        "crypto-mcp": "dist/index.js"
+        "crypto-mcp-server": "dist/index.js"
     },
     "type": "commonjs",
     "scripts": {
