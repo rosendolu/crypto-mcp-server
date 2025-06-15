@@ -1,6 +1,6 @@
 {
     "name": "crypto-mcp-server",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A TypeScript MCP CLI for cryptocurrency technical analysis, supporting Binance Spot.",
     "main": "dist/index.js",
     "bin": {
