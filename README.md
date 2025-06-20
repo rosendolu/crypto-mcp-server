@@ -80,8 +80,10 @@ To use the MCP server, you need API credentials from your exchange account (e.g.
 
 If you don't have an account yet:
 
-> Don't have an account? Click to sign up now <br/> > [<img src="docs/icons/binance.png" alt="Binance" width="28" style="vertical-align:middle;background:#000"/> Binance](https://www.marketwebb.net/activity/referral-entry/CPA?ref=CPA_00568KAJ11)  
-> [<img src="docs/icons/gate.png" alt="Gate" width="28" style="vertical-align:middle;background:#000;"/> Gate](https://www.gateweb.space/signup/AVFAVws?ref_type=103)
+> Don't have an account? Click to sign up now
+
+[<img src="docs/icons/binance.png" alt="Binance" width="28" style="vertical-align:middle;background:#000"/> Binance](https://www.marketwebb.net/activity/referral-entry/CPA?ref=CPA_00568KAJ11)  
+ [<img src="docs/icons/gate.png" alt="Gate" width="28" style="vertical-align:middle;background:#000;"/> Gate](https://www.gateweb.space/signup/AVFAVws?ref_type=103)
 
 After registering, create an API key and secret in your exchange account dashboard.
 
