@@ -199,6 +199,8 @@ export function calculateIndicator(
             return calculateRSI(input);
         case 'bollingerbands':
         case 'bb':
+        case 'bollinger bands':
+        case 'bollinger_bands':
             return calculateBollingerBands(input);
         case 'adx':
         case 'dmi':

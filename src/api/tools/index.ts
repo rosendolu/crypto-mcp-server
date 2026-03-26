@@ -2,6 +2,7 @@ import * as ccxtProvider from '@/data-providers/ccxt';
 import { adaptSymbolForExchange } from '@/data-providers/ccxt';
 import { calculateIndicator } from '@/indicators/indicatorService';
 import { IndicatorInput } from '@/types/indicators.types';
+import { StopOrderParams } from '@/types/ccxt.types';
 import logger from '@/utils/logger';
 import dayjs from 'dayjs';
 import fs from 'fs';
@@ -63,16 +64,18 @@ export function registerTools(server: any) {
         'depth',
         {
             symbol: z.string().describe('Trading pair symbol, e.g., ETH/USDT, BTC/USDT'),
+            limit: z.number().optional().default(20).describe('Number of bids/asks to return per side (default: 20)'),
             exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
         },
-        async ({ symbol, exchange }: { symbol: string; exchange?: string }) => {
+        async ({ symbol, limit, exchange }: { symbol: string; limit?: number; exchange?: string }) => {
             if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
-            logger.debug('Tool depth called with params: %j', { symbol, exchange });
+            logger.debug('Tool depth called with params: %j', { symbol, limit, exchange });
             try {
-                const result = await ccxtProvider.depth(symbol, exchange);
+                const result = await ccxtProvider.depth(symbol, exchange, limit);
                 if (!result) return { content: [{ type: 'text', text: 'No data.' }], isError: true };
-                const bidRows = result.bids.slice(0, 10).map(([price, qty]) => [price, qty]);
-                const askRows = result.asks.slice(0, 10).map(([price, qty]) => [price, qty]);
+                const displayLimit = limit ?? 20;
+                const bidRows = result.bids.slice(0, displayLimit).map(([price, qty]) => [price, qty]);
+                const askRows = result.asks.slice(0, displayLimit).map(([price, qty]) => [price, qty]);
                 const bidTable = toMarkdownTable(['Bid Price', 'Bid Qty'], bidRows);
                 const askTable = toMarkdownTable(['Ask Price', 'Ask Qty'], askRows);
                 logger.debug('Tool depth result: %j', result);
@@ -524,10 +527,12 @@ export function registerTools(server: any) {
         'analyzeLogs',
         {
             date: z.string().describe('Log date: YYYY-MM-DD, "today", or "yesterday"'),
+            search: z.string().optional().describe('Filter log lines containing this string (case-insensitive)'),
+            limit: z.number().optional().default(200).describe('Max number of log lines to return (default: 200)'),
         },
-        async ({ date }: { date: string }) => {
+        async ({ date, search, limit }: { date: string; search?: string; limit?: number }) => {
             try {
-                logger.debug('Tool analyzeLogs called with params: %j', { date });
+                logger.debug('Tool analyzeLogs called with params: %j', { date, search, limit });
                 const LOG_DIR = require('@/constant').LOG_DIR;
                 if (!fs.existsSync(LOG_DIR)) {
                     return {
@@ -544,7 +549,6 @@ export function registerTools(server: any) {
                 } else {
                     targetDate = date;
                 }
-                // Find the log file for the date (assume only one file per date, or pick the first if multiple)
                 const files = fs.readdirSync(LOG_DIR);
                 const logFile = files.find((f: string) => f.startsWith(targetDate));
                 if (!logFile) {
@@ -555,10 +559,18 @@ export function registerTools(server: any) {
                 }
                 const filePath = path.join(LOG_DIR, logFile);
                 const fileContent = fs.readFileSync(filePath, 'utf-8');
-                return {
-                    content: [{ type: 'text', text: fileContent }],
-                    isError: false,
-                };
+                let lines = fileContent.split('\n');
+                if (search) {
+                    const lowerSearch = search.toLowerCase();
+                    lines = lines.filter(line => line.toLowerCase().includes(lowerSearch));
+                }
+                const maxLines = limit ?? 200;
+                const truncated = lines.length > maxLines;
+                const output = lines.slice(-maxLines).join('\n');
+                const summary = truncated
+                    ? `(Showing last ${maxLines} of ${lines.length} matching lines)\n\n${output}`
+                    : output;
+                return { content: [{ type: 'text', text: summary }], isError: false };
             } catch (err: any) {
                 logger.error('analyzeLogs error: %s', err.message);
                 return {
@@ -618,9 +630,9 @@ export function registerTools(server: any) {
             exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
             indicators: z
                 .array(z.string())
-                .default(['macd', 'rsi', 'bollinger bands', 'kdj', 'ema', 'atr', 'cmf'])
+                .default(['macd', 'rsi', 'bollingerbands', 'kdj', 'ema', 'atr', 'cmf'])
                 .describe(
-                    'Indicators to calculate, supported: ["macd", "rsi", "bollinger bands", "kdj", "ema", "atr"]'
+                    'Indicators to calculate, supported: ["macd", "rsi", "bollingerbands", "bb", "kdj", "ema", "atr", "obv", "mfi", "adx", "stochastic"]'
                 ),
             period: z.number().optional().default(14).describe('Default period for indicators'),
             fastPeriod: z.number().optional().default(12).describe('Fast period for MACD'),
@@ -700,6 +712,58 @@ export function registerTools(server: any) {
                 };
             } catch (error) {
                 logger.error('Error in calculateIndicators tool: %s', error);
+                return { content: [{ type: 'text', text: String(error) }], isError: true };
+            }
+        }
+    );
+
+    // Stop-Loss Order
+    server.tool(
+        'stopLossOrder',
+        {
+            symbol: z.string().describe('Trading pair symbol, e.g., ETH/USDT, BTC/USDT'),
+            side: z.enum(['buy', 'sell']).describe('Order side: buy or sell'),
+            quantity: z.number().describe('Order quantity'),
+            stopPrice: z.number().describe('Trigger price for the stop-loss order'),
+            limitPrice: z.number().optional().describe('Limit price (if provided, creates a stop-limit order; otherwise a stop-market order)'),
+            exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
+        },
+        async ({ symbol, side, quantity, stopPrice, limitPrice, exchange }: StopOrderParams) => {
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
+            logger.debug('Tool stopLossOrder called with params: %j', { symbol, side, quantity, stopPrice, limitPrice, exchange });
+            try {
+                const result = await ccxtProvider.stopLossOrder({ symbol, side, quantity, stopPrice, limitPrice, exchange });
+                if (!result) return { content: [{ type: 'text', text: 'Failed to place stop-loss order.' }], isError: true };
+                logger.debug('Tool stopLossOrder result: %j', result);
+                return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+            } catch (error) {
+                logger.error('Error in stopLossOrder tool: %s', error);
+                return { content: [{ type: 'text', text: String(error) }], isError: true };
+            }
+        }
+    );
+
+    // Take-Profit Order
+    server.tool(
+        'takeProfitOrder',
+        {
+            symbol: z.string().describe('Trading pair symbol, e.g., ETH/USDT, BTC/USDT'),
+            side: z.enum(['buy', 'sell']).describe('Order side: buy or sell'),
+            quantity: z.number().describe('Order quantity'),
+            stopPrice: z.number().describe('Trigger price for the take-profit order'),
+            limitPrice: z.number().optional().describe('Limit price (if provided, creates a take-profit-limit order; otherwise a take-profit-market order)'),
+            exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
+        },
+        async ({ symbol, side, quantity, stopPrice, limitPrice, exchange }: StopOrderParams) => {
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
+            logger.debug('Tool takeProfitOrder called with params: %j', { symbol, side, quantity, stopPrice, limitPrice, exchange });
+            try {
+                const result = await ccxtProvider.takeProfitOrder({ symbol, side, quantity, stopPrice, limitPrice, exchange });
+                if (!result) return { content: [{ type: 'text', text: 'Failed to place take-profit order.' }], isError: true };
+                logger.debug('Tool takeProfitOrder result: %j', result);
+                return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+            } catch (error) {
+                logger.error('Error in takeProfitOrder tool: %s', error);
                 return { content: [{ type: 'text', text: String(error) }], isError: true };
             }
         }

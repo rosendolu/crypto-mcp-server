@@ -17,6 +17,8 @@ import {
     OrderType,
     PrevDayStats,
     SUPPORTED_EXCHANGES,
+    StopOrderParams,
+    StopOrderResult,
     TickerData,
     Trade,
 } from '@/types/ccxt.types';
@@ -254,12 +256,12 @@ export async function bookTickers(symbol?: string, exchangeId?: ExchangeId): Pro
 /**
  * Get order book (market depth) for a symbol
  */
-export async function depth(symbol: string, exchangeId?: ExchangeId): Promise<OrderBook | null> {
+export async function depth(symbol: string, exchangeId?: ExchangeId, limit?: number): Promise<OrderBook | null> {
     const exchange = getExchange(exchangeId);
     try {
         const adaptedSymbol = adaptSymbolForExchange(symbol, exchangeId);
-        logger.debug('Called depth with params: %j', { symbol, adaptedSymbol, exchangeId });
-        const ob = await exchange.fetchOrderBook(adaptedSymbol);
+        logger.debug('Called depth with params: %j', { symbol, adaptedSymbol, exchangeId, limit });
+        const ob = await exchange.fetchOrderBook(adaptedSymbol, limit);
         logger.info('Fetched order book for %s', adaptedSymbol);
         logger.debug('depth result: %j', ob);
         return {
@@ -731,6 +733,72 @@ export async function trades(symbol: string, exchangeId?: ExchangeId): Promise<T
         }));
     } catch (error) {
         logger.error('Error fetching trades for %s: %s', symbol, error);
+        return null;
+    }
+}
+
+/**
+ * Place a stop-loss order.
+ * Uses ccxt createOrder with 'stop' or 'stop_loss_limit' type depending on whether a limitPrice is provided.
+ */
+export async function stopLossOrder(params: StopOrderParams): Promise<StopOrderResult | null> {
+    const { symbol, side, quantity, stopPrice, limitPrice, exchange: exchangeId } = params;
+    const exchange = getExchange(exchangeId as ExchangeId | undefined);
+    try {
+        const adaptedSymbol = adaptSymbolForExchange(symbol, exchangeId as ExchangeId | undefined);
+        logger.debug('Called stopLossOrder with params: %j', params);
+        const type = limitPrice ? 'stop_loss_limit' : 'stop_loss';
+        const ccxtParams: any = { stopPrice };
+        if (limitPrice) ccxtParams.price = limitPrice;
+        const order = await exchange.createOrder(adaptedSymbol, type, side, quantity, limitPrice, ccxtParams);
+        logger.info('Stop-loss order placed for %s: %j', adaptedSymbol, order);
+        return {
+            orderId: String(order.id),
+            symbol,
+            side,
+            type,
+            stopPrice,
+            limitPrice,
+            quantity,
+            status: order.status || 'open',
+            timestamp: order.timestamp || Date.now(),
+            info: order.info,
+        };
+    } catch (error) {
+        logger.error('Error placing stop-loss order for %s: %s', symbol, error);
+        return null;
+    }
+}
+
+/**
+ * Place a take-profit order.
+ * Uses ccxt createOrder with 'take_profit' or 'take_profit_limit' type depending on whether a limitPrice is provided.
+ */
+export async function takeProfitOrder(params: StopOrderParams): Promise<StopOrderResult | null> {
+    const { symbol, side, quantity, stopPrice, limitPrice, exchange: exchangeId } = params;
+    const exchange = getExchange(exchangeId as ExchangeId | undefined);
+    try {
+        const adaptedSymbol = adaptSymbolForExchange(symbol, exchangeId as ExchangeId | undefined);
+        logger.debug('Called takeProfitOrder with params: %j', params);
+        const type = limitPrice ? 'take_profit_limit' : 'take_profit';
+        const ccxtParams: any = { stopPrice };
+        if (limitPrice) ccxtParams.price = limitPrice;
+        const order = await exchange.createOrder(adaptedSymbol, type, side, quantity, limitPrice, ccxtParams);
+        logger.info('Take-profit order placed for %s: %j', adaptedSymbol, order);
+        return {
+            orderId: String(order.id),
+            symbol,
+            side,
+            type,
+            stopPrice,
+            limitPrice,
+            quantity,
+            status: order.status || 'open',
+            timestamp: order.timestamp || Date.now(),
+            info: order.info,
+        };
+    } catch (error) {
+        logger.error('Error placing take-profit order for %s: %s', symbol, error);
         return null;
     }
 }

@@ -172,3 +172,25 @@ export interface Trade {
     timestamp: number;
     info?: any;
 }
+
+export interface StopOrderParams {
+    symbol: string;
+    side: OrderSide;
+    quantity: number;
+    stopPrice: number;
+    limitPrice?: number;
+    exchange?: string;
+}
+
+export interface StopOrderResult {
+    orderId: string;
+    symbol: string;
+    side: OrderSide;
+    type: string;
+    stopPrice: number;
+    limitPrice?: number;
+    quantity: number;
+    status: string;
+    timestamp: number;
+    info?: any;
+}
