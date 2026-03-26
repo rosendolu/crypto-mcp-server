@@ -1,5 +1,7 @@
 node_modules/
 dist/
+.env
 *.local
-.cursor/rules/crypto/
-.temp
+.DS_Store
+.temp/
+temp/

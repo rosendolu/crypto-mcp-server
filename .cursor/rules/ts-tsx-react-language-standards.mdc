@@ -1,0 +1,101 @@
+---
+description: TS/TSX + React language standards (always apply)
+alwaysApply: true
+---
+
+# TS/TSX + React Language Standards
+
+## 1) Compare string/number by converting to string
+
+- When comparing values that may be `string` or `number`, **always convert both sides to string** first.
+
+```ts
+// ✅ GOOD
+String(a) === String(b)
+
+// ❌ BAD (type-coercion surprises, inconsistent comparisons)
+a == b
+```
+
+## 2) Types must live in a dedicated `types.ts` at module level
+
+- Type definitions must be extracted into **module-level** `types.ts`.
+- Components import types from that module file.
+
+Example layout:
+
+```text
+moduleA/
+  types.ts
+  componentA/
+```
+
+## 3) Constants must live in a dedicated `constant.ts` at module level
+
+- Constants must be defined in **module-level** `constant.ts`.
+
+Example layout:
+
+```text
+moduleA/
+  constant.ts
+  componentA/
+```
+
+## 4) React components must be named function components
+
+- Use **named functions** for React components.
+- Avoid `const X = () => {}` (anonymous function component style).
+
+```tsx
+// ✅ GOOD
+export function UserCard(props: Props) {
+  return <div />;
+}
+
+// ❌ BAD
+export const UserCard = (props: Props) => {
+  return <div />;
+};
+```
+
+## 5) React props typing pattern
+
+- Props type must be imported from the module `types.ts`.
+- Component signature must be `function A(props: Tprops) { ... }`
+- Destructure props **inside** the function body.
+
+```tsx
+import type Tprops from '../types.ts'
+
+export function A(props: Tprops) {
+  const { id, name } = props
+  return <div>{name}</div>
+}
+```
+
+## 6) Imports must use relative paths
+
+- Component imports must use **relative paths only** (no absolute/alias imports).
+
+```ts
+// ✅ GOOD
+import type Tprops from '../types.ts'
+
+// ❌ BAD
+import type Tprops from 'moduleA/types'
+import type Tprops from '@/moduleA/types'
+```
+
+## 7) No magic numbers (define in `constant.ts`)
+
+- Magic numbers are **not allowed** in TS/TSX code.
+- Any numeric literal that represents a business/UI rule must be extracted to the module-level `constant.ts`.
+
+```ts
+// ✅ GOOD
+export const MAX_RETRY_TIMES = 3
+
+// ❌ BAD
+for (let i = 0; i < 3; i++) {}
+```

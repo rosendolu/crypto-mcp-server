@@ -1,4 +1,6 @@
-node_modules/
-*.zip
-/log
-/dist
+node_modules
+dist
+build
+.next
+.temp/
+temp/

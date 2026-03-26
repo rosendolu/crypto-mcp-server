@@ -1,11 +1,11 @@
 ---
 name: code-review
 description: >
-  Perform structured, severity-graded code reviews on changed/diff code. Use this skill whenever
-  the user submits a code diff, patch, pull request snippet, or says "review my code", "check this
-  change", "LGTM?", "can you review", "code review", or pastes before/after code blocks. Also trigger
-  when the user asks about potential bugs, security issues, or data compatibility problems in code.
-  Always apply this skill even for small snippets — every change deserves a graded review.
+    Perform structured, severity-graded code reviews on changed/diff code. Use this skill whenever
+    the user submits a code diff, patch, pull request snippet, or says "review my code", "check this
+    change", "LGTM?", "can you review", "code review", or pastes before/after code blocks. Also trigger
+    when the user asks about potential bugs, security issues, or data compatibility problems in code.
+    Always apply this skill even for small snippets — every change deserves a graded review.
 ---
 
 # Code Review Skill
