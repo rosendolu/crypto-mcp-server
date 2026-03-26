@@ -756,8 +756,13 @@ export async function fundingRate(symbol: string, exchangeId?: ExchangeId): Prom
         const raw = await exchange.fetchFundingRate(adaptedSymbol);
         logger.info('Fetched funding rate for %s on %s', adaptedSymbol, exchangeId);
         logger.debug('fundingRate result: %j', raw);
+        // Normalize symbol to BASE/QUOTE format regardless of exchange-native format
+        const normalizedSymbol =
+            typeof raw.symbol === 'string'
+                ? raw.symbol.toUpperCase().replace('_', '/')
+                : symbol.toUpperCase().replace('_', '/');
         return {
-            symbol: raw.symbol || symbol,
+            symbol: normalizedSymbol,
             fundingRate: Number(raw.fundingRate ?? raw.currentFundingRate ?? 0),
             nextFundingTime: raw.nextFundingTimestamp ?? raw.nextFundingTime ?? null,
             predictedFundingRate: raw.predictedFundingRate != null ? Number(raw.predictedFundingRate) : null,
