@@ -10,11 +10,11 @@ A powerful MCP for cryptocurrency market data, cross-platform trading, arbitrage
 
 ## ✨ Features
 
--   🏦 **Multi-Exchange:** Trade and analyze on all major certified exchanges CCXT powered)
--   🔄 **Arbitrage:** Cross-exchange arbitrage and analytics
--   📈 **Kline/Candlestick Analysis:** Advanced OHLCV and indicator analytics (MACD, Bollinger Bands, KDJ, EMA, and more)
--   📊 **Portfolio & Position Analysis:** Unified multi-exchange portfolio view
--   🤖 **Automated Trading & Technical Analysis:** Strategy-driven, multi-account, multi-symbol
+- 🏦 **Multi-Exchange:** Trade and analyze on all major certified exchanges CCXT powered)
+- 🔄 **Arbitrage:** Cross-exchange arbitrage and analytics
+- 📈 **Kline/Candlestick Analysis:** Advanced OHLCV and indicator analytics (MACD, Bollinger Bands, KDJ, EMA, and more)
+- 📊 **Portfolio & Position Analysis:** Unified multi-exchange portfolio view
+- 🤖 **Automated Trading & Technical Analysis:** Strategy-driven, multi-account, multi-symbol
 
 ## 🛠️ Tools
 
@@ -26,47 +26,47 @@ A powerful MCP for cryptocurrency market data, cross-platform trading, arbitrage
 >
 > Example:
 >
-> -   English: `Get the latest price for ETH/USDT on binance.`
-> -   中文: `查询 binance 上 ETH/USDT 的最新价格。`
+> - English: `Get the latest price for ETH/USDT on binance.`
+> - 中文: `查询 binance 上 ETH/USDT 的最新价格。`
 
 The CLI provides the following tools (all exchange-agnostic, powered by CCXT:
 
--   `prices` — Get current price(s) for a symbol or all symbols
-    -   Parameters: `symbol?`, `exchange?`
--   `bookTickers` — Get best bid/ask for a symbol or all symbols
-    -   Parameters: `symbol?`, `exchange?`
--   `prevDay` — Get 24h ticker stats for a symbol or all symbols
-    -   Parameters: `symbol?`, `exchange?`
--   `candlesticks` — Get OHLCV candlestick data
-    -   Parameters: `symbol`, `interval`, `options?`, `exchange?`
--   `balance` — Get account balance
-    -   Parameters: `exchange?`
--   `dustLog` — Get dust conversion log (Binance only)
-    -   Parameters: `exchange?`
--   `buy` — Place a limit buy order
-    -   Parameters: `symbol`, `quantity`, `price`, `options?`, `exchange?`
--   `sell` — Place a limit sell order
-    -   Parameters: `symbol`, `quantity`, `price`, `options?`, `exchange?`
--   `marketBuy` — Place a market buy order
-    -   Parameters: `symbol`, `quantity`, `options?`, `exchange?`
--   `marketSell` — Place a market sell order
-    -   Parameters: `symbol`, `quantity`, `options?`, `exchange?`
--   `orderStatus` — Get order status
-    -   Parameters: `symbol`, `orderId`, `exchange?`
--   `allOrders` — Get all orders for a symbol
-    -   Parameters: `symbol`, `exchange?`
--   `openOrders` — Get open orders for a symbol
-    -   Parameters: `symbol`, `exchange?`
--   `cancel` — Cancel an order
-    -   Parameters: `symbol`, `orderId`, `exchange?`
--   `cancelAll` — Cancel all open orders for a symbol
-    -   Parameters: `symbol`, `exchange?`
--   `trades` — Get recent trades for a symbol
-    -   Parameters: `symbol`, `exchange?`
--   `checkExchangeConfigs` — Check all supported exchanges for API key/secret config
-    -   No parameters
--   `analyzeLogs` — Analyze system logs
-    -   Parameters: `date?`, `search?`, `limit?`
+- `prices` — Get current price(s) for a symbol or all symbols
+    - Parameters: `symbol?`, `exchange?`
+- `bookTickers` — Get best bid/ask for a symbol or all symbols
+    - Parameters: `symbol?`, `exchange?`
+- `prevDay` — Get 24h ticker stats for a symbol or all symbols
+    - Parameters: `symbol?`, `exchange?`
+- `candlesticks` — Get OHLCV candlestick data
+    - Parameters: `symbol`, `interval`, `options?`, `exchange?`
+- `balance` — Get account balance
+    - Parameters: `exchange?`
+- `dustLog` — Get dust conversion log (Binance only)
+    - Parameters: `exchange?`
+- `buy` — Place a limit buy order
+    - Parameters: `symbol`, `quantity`, `price`, `options?`, `exchange?`
+- `sell` — Place a limit sell order
+    - Parameters: `symbol`, `quantity`, `price`, `options?`, `exchange?`
+- `marketBuy` — Place a market buy order
+    - Parameters: `symbol`, `quantity`, `options?`, `exchange?`
+- `marketSell` — Place a market sell order
+    - Parameters: `symbol`, `quantity`, `options?`, `exchange?`
+- `orderStatus` — Get order status
+    - Parameters: `symbol`, `orderId`, `exchange?`
+- `allOrders` — Get all orders for a symbol
+    - Parameters: `symbol`, `exchange?`
+- `openOrders` — Get open orders for a symbol
+    - Parameters: `symbol`, `exchange?`
+- `cancel` — Cancel an order
+    - Parameters: `symbol`, `orderId`, `exchange?`
+- `cancelAll` — Cancel all open orders for a symbol
+    - Parameters: `symbol`, `exchange?`
+- `trades` — Get recent trades for a symbol
+    - Parameters: `symbol`, `exchange?`
+- `checkExchangeConfigs` — Check all supported exchanges for API key/secret config
+    - No parameters
+- `analyzeLogs` — Analyze system logs
+    - Parameters: `date?`, `search?`, `limit?`
 
 ## 🚀 Getting Started
 
@@ -82,7 +82,7 @@ If you don't have an account yet:
 
 > Don't have an account? Click to sign up now
 
-[<img src="docs/icons/binance.png" alt="Binance" width="28" style="vertical-align:middle;background:#000"/> Binance](https://www.marketwebb.net/activity/referral-entry/CPA?ref=CPA_00568KAJ11)  
+[<img src="docs/icons/binance.png" alt="Binance" width="28" style="vertical-align:middle;background:#000"/> Binance](https://www.bsmkweb.cc/referral/earn-together/refer2earn-usdc/claim?hl=zh-CN&ref=GRO_28502_GR3LI&utm_source=default)  
  [<img src="docs/icons/gate.png" alt="Gate" width="28" style="vertical-align:middle;background:#000;"/> Gate](https://www.gateweb.space/signup/AVFAVws?ref_type=103)
 
 After registering, create an API key and secret in your exchange account dashboard.
@@ -130,27 +130,27 @@ GATE_SECRET=your_gate_secret
 
 #### Supported Exchanges (CCXT Certified)
 
--   binance
--   binancecoinm
--   binanceusdm
--   bingx
--   bitget
--   bitmart
--   bitmex
--   bybit
--   coinex
--   cryptocom
--   gate
--   hashkey
--   htx
--   hyperliquid
--   kucoin
--   kucoinfutures
--   mexc
--   modetrade
--   okx
--   woo
--   woofipro
+- binance
+- binancecoinm
+- binanceusdm
+- bingx
+- bitget
+- bitmart
+- bitmex
+- bybit
+- coinex
+- cryptocom
+- gate
+- hashkey
+- htx
+- hyperliquid
+- kucoin
+- kucoinfutures
+- mexc
+- modetrade
+- okx
+- woo
+- woofipro
 
 For each exchange above, set `${EXCHANGE_ID}_API_KEY` and `${EXCHANGE_ID}_SECRET` in your `.env` file. You may configure multiple exchanges at once; the system will use the one you specify at runtime or default to the first valid configuration found.
 
@@ -162,11 +162,11 @@ LOG_LEVEL=info # options: emerg, alert, crit, error, warning, notice, info, debu
 
 #### Multi-Exchange & Multi-Strategy Support
 
--   The system supports all CCXT certified exchanges for both public and private endpoints.
--   At least one exchange's API Key/Secret must be configured for the system to start.
--   You can switch the active exchange via configuration or parameters in your application code.
--   If no valid API credentials are found for any supported exchange, the system will throw an error and log the issue.
--   **Multiple technical indicators and strategies supported:** MACD, Bollinger Bands, KDJ, EMA, and more.
+- The system supports all CCXT certified exchanges for both public and private endpoints.
+- At least one exchange's API Key/Secret must be configured for the system to start.
+- You can switch the active exchange via configuration or parameters in your application code.
+- If no valid API credentials are found for any supported exchange, the system will throw an error and log the issue.
+- **Multiple technical indicators and strategies supported:** MACD, Bollinger Bands, KDJ, EMA, and more.
 
 ## 🤝 Business Cooperation
 
