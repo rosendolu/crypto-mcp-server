@@ -159,13 +159,11 @@ export function detectVolumeSpike(volume: number[], period: number = 3): boolean
 }
 
 /**
- * Funding Rate (Placeholder)
- * Funding rate is not calculated from kline, needs to be fetched from exchange API
+ * Funding Rate
+ * Funding rate is not calculable from kline data.
+ * Use the `fundingRate` or `fundingRates` MCP tools to fetch live funding rates from the exchange API.
  */
-export function getFundingRatePlaceholder(): number | null {
-    // Placeholder: Implement via exchange API integration
-    return null;
-}
+// Funding rate retrieval is handled by the `fundingRate` MCP tool via the CCXT provider.
 
 /**
  * On-chain Large Transfer (Placeholder)
@@ -217,8 +215,6 @@ export function calculateIndicator(
             return calculateMFI(input);
         case 'volumespike':
             return detectVolumeSpike(input.volume!, input.period || 3);
-        case 'fundingrate':
-            return getFundingRatePlaceholder();
         case 'onchainlargetransfer':
             return getOnChainLargeTransferPlaceholder();
         default:

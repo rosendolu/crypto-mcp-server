@@ -9,6 +9,7 @@ import {
     ExchangeConfig,
     ExchangeId,
     ExchangeInstance,
+    FundingRate,
     Order,
     OrderBook,
     OrderResult,
@@ -741,3 +742,75 @@ logger.info(
     'Configured exchanges: %j',
     availableConfigs.map(c => c.id)
 );
+
+/**
+ * Get the current funding rate for a single perpetual futures symbol.
+ * Exchange-dependent: only available on exchanges that support perpetual futures.
+ * Returns null and logs a warning if the exchange does not support this endpoint.
+ */
+export async function fundingRate(symbol: string, exchangeId?: ExchangeId): Promise<FundingRate | null> {
+    const exchange = getExchange(exchangeId);
+    const adaptedSymbol = adaptSymbolForExchange(symbol, exchangeId);
+    logger.debug('Called fundingRate with params: %j', { symbol, adaptedSymbol, exchangeId });
+    try {
+        const raw = await exchange.fetchFundingRate(adaptedSymbol);
+        logger.info('Fetched funding rate for %s on %s', adaptedSymbol, exchangeId);
+        logger.debug('fundingRate result: %j', raw);
+        return {
+            symbol: raw.symbol || symbol,
+            fundingRate: Number(raw.fundingRate ?? raw.currentFundingRate ?? 0),
+            nextFundingTime: raw.nextFundingTimestamp ?? raw.nextFundingTime ?? null,
+            predictedFundingRate: raw.predictedFundingRate != null ? Number(raw.predictedFundingRate) : null,
+            timestamp: raw.timestamp ?? null,
+        };
+    } catch (error) {
+        logger.warn('Exchange %s does not support fetchFundingRate for %s: %s', exchangeId, symbol, error);
+        return null;
+    }
+}
+
+/**
+ * Get funding rates for multiple perpetual futures symbols, or all available symbols.
+ * Falls back to iterating single fetchFundingRate calls if fetchFundingRates is unavailable.
+ * Returns null and logs a warning if the exchange does not support funding rates at all.
+ */
+export async function fundingRates(symbols?: string[], exchangeId?: ExchangeId): Promise<FundingRate[] | null> {
+    const exchange = getExchange(exchangeId);
+    logger.debug('Called fundingRates with params: %j', { symbols, exchangeId });
+    try {
+        if (typeof exchange.fetchFundingRates === 'function') {
+            const adaptedSymbols = symbols
+                ? symbols.map(s => adaptSymbolForExchange(s, exchangeId))
+                : undefined;
+            const raw = await exchange.fetchFundingRates(adaptedSymbols);
+            logger.info('Fetched funding rates (batch) on %s', exchangeId);
+            logger.debug('fundingRates result: %j', raw);
+            const entries = Object.values(raw) as any[];
+            return entries.map((r: any) => ({
+                symbol: r.symbol,
+                fundingRate: Number(r.fundingRate ?? r.currentFundingRate ?? 0),
+                nextFundingTime: r.nextFundingTimestamp ?? r.nextFundingTime ?? null,
+                predictedFundingRate: r.predictedFundingRate != null ? Number(r.predictedFundingRate) : null,
+                timestamp: r.timestamp ?? null,
+            }));
+        }
+        // Fallback: iterate using single fetchFundingRate calls
+        if (!symbols || symbols.length === 0) {
+            logger.warn(
+                'Exchange %s does not support batch fetchFundingRates; no symbol list provided for fallback.',
+                exchangeId
+            );
+            return null;
+        }
+        logger.info('Using single fetchFundingRate fallback for %s symbols on %s', symbols.length, exchangeId);
+        const results: FundingRate[] = [];
+        for (const s of symbols) {
+            const single = await fundingRate(s, exchangeId);
+            if (single) results.push(single);
+        }
+        return results.length > 0 ? results : null;
+    } catch (error) {
+        logger.warn('Exchange %s does not support fetchFundingRates: %s', exchangeId, error);
+        return null;
+    }
+}

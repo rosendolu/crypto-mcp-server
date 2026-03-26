@@ -14,7 +14,6 @@ import {
     calculateRSI,
     calculateStochastic,
     detectVolumeSpike,
-    getFundingRatePlaceholder,
     getOnChainLargeTransferPlaceholder,
 } from './indicatorService';
 
@@ -124,11 +123,6 @@ describe('All Indicator Calculations', () => {
     it('detects Volume Spike', () => {
         const result = detectVolumeSpike(volume, 3);
         expect(typeof result).toBe('boolean');
-    });
-
-    it('returns Funding Rate placeholder', () => {
-        const result = getFundingRatePlaceholder();
-        expect(result === null || typeof result === 'number').toBe(true);
     });
 
     it('returns On-chain Large Transfer placeholder', () => {

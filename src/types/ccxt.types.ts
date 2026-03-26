@@ -172,3 +172,11 @@ export interface Trade {
     timestamp: number;
     info?: any;
 }
+
+export interface FundingRate {
+    symbol: string;
+    fundingRate: number;
+    nextFundingTime: number | null;
+    predictedFundingRate: number | null;
+    timestamp: number | null;
+}

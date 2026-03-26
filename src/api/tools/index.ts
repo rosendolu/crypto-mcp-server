@@ -704,4 +704,92 @@ export function registerTools(server: any) {
             }
         }
     );
+
+    // Funding Rate Tools
+    server.tool(
+        'fundingRate',
+        {
+            symbol: z.string().describe('Perpetual futures trading pair symbol, e.g., ETH/USDT, BTC/USDT'),
+            exchange: z.string().optional().describe('Exchange id, e.g., binance, bybit, okx, gate, etc.'),
+        },
+        async ({ symbol, exchange }: { symbol: string; exchange?: string }) => {
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
+            logger.debug('Tool fundingRate called with params: %j', { symbol, exchange });
+            try {
+                const result = await ccxtProvider.fundingRate(symbol, exchange);
+                if (!result) {
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: `Funding rate not available for ${symbol} on ${exchange || 'binance'}. This exchange may not support perpetual futures funding rates.`,
+                            },
+                        ],
+                        isError: true,
+                    };
+                }
+                const headers = ['Symbol', 'Funding Rate', 'Next Funding Time', 'Predicted Rate', 'Timestamp'];
+                const nextFundingTime = result.nextFundingTime
+                    ? dayjs(result.nextFundingTime).format('YYYY-MM-DD HH:mm:ss')
+                    : 'N/A';
+                const timestamp = result.timestamp ? dayjs(result.timestamp).format('YYYY-MM-DD HH:mm:ss') : 'N/A';
+                const rows = [
+                    [
+                        result.symbol,
+                        result.fundingRate.toFixed(6),
+                        nextFundingTime,
+                        result.predictedFundingRate != null ? result.predictedFundingRate.toFixed(6) : 'N/A',
+                        timestamp,
+                    ],
+                ];
+                logger.debug('Tool fundingRate result: %j', result);
+                return { content: [{ type: 'text', text: toMarkdownTable(headers, rows) }] };
+            } catch (error) {
+                logger.error('Error in fundingRate tool: %s', error);
+                return { content: [{ type: 'text', text: String(error) }], isError: true };
+            }
+        }
+    );
+
+    server.tool(
+        'fundingRates',
+        {
+            symbols: z
+                .array(z.string())
+                .optional()
+                .describe('List of perpetual futures symbols, e.g., ["BTC/USDT", "ETH/USDT"]. Omit for all available.'),
+            exchange: z.string().optional().describe('Exchange id, e.g., binance, bybit, okx, gate, etc.'),
+        },
+        async ({ symbols, exchange }: { symbols?: string[]; exchange?: string }) => {
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
+            logger.debug('Tool fundingRates called with params: %j', { symbols, exchange });
+            try {
+                const result = await ccxtProvider.fundingRates(symbols, exchange);
+                if (!result || result.length === 0) {
+                    return {
+                        content: [
+                            {
+                                type: 'text',
+                                text: `Funding rates not available on ${exchange || 'binance'}. This exchange may not support perpetual futures funding rates.`,
+                            },
+                        ],
+                        isError: true,
+                    };
+                }
+                const headers = ['Symbol', 'Funding Rate', 'Next Funding Time', 'Predicted Rate', 'Timestamp'];
+                const rows = result.map(r => [
+                    r.symbol,
+                    r.fundingRate.toFixed(6),
+                    r.nextFundingTime ? dayjs(r.nextFundingTime).format('YYYY-MM-DD HH:mm:ss') : 'N/A',
+                    r.predictedFundingRate != null ? r.predictedFundingRate.toFixed(6) : 'N/A',
+                    r.timestamp ? dayjs(r.timestamp).format('YYYY-MM-DD HH:mm:ss') : 'N/A',
+                ]);
+                logger.debug('Tool fundingRates result: %j', result);
+                return { content: [{ type: 'text', text: toMarkdownTable(headers, rows) }] };
+            } catch (error) {
+                logger.error('Error in fundingRates tool: %s', error);
+                return { content: [{ type: 'text', text: String(error) }], isError: true };
+            }
+        }
+    );
 }
