@@ -3,6 +3,7 @@ import { adaptSymbolForExchange } from '@/data-providers/ccxt';
 import { calculateIndicator } from '@/indicators/indicatorService';
 import { IndicatorInput } from '@/types/indicators.types';
 import { StopOrderParams } from '@/types/ccxt.types';
+import { LOG_DIR } from '@/constant';
 import logger from '@/utils/logger';
 import dayjs from 'dayjs';
 import fs from 'fs';
@@ -533,7 +534,7 @@ export function registerTools(server: any) {
         async ({ date, search, limit }: { date: string; search?: string; limit?: number }) => {
             try {
                 logger.debug('Tool analyzeLogs called with params: %j', { date, search, limit });
-                const LOG_DIR = require('@/constant').LOG_DIR;
+                const LOG_DIR_PATH = LOG_DIR;
                 if (!fs.existsSync(LOG_DIR)) {
                     return {
                         content: [{ type: 'text', text: `Log directory not found: ${LOG_DIR}` }],
