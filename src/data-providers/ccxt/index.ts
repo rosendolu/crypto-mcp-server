@@ -785,13 +785,13 @@ export async function fundingRates(symbols?: string[], exchangeId?: ExchangeId):
             const raw = await exchange.fetchFundingRates(adaptedSymbols);
             logger.info('Fetched funding rates (batch) on %s', exchangeId);
             logger.debug('fundingRates result: %j', raw);
-            const entries = Object.values(raw) as any[];
-            return entries.map((r: any) => ({
-                symbol: r.symbol,
-                fundingRate: Number(r.fundingRate ?? r.currentFundingRate ?? 0),
-                nextFundingTime: r.nextFundingTimestamp ?? r.nextFundingTime ?? null,
+            const entries = (Object.values(raw) as Record<string, unknown>[]);
+            return entries.map((r) => ({
+                symbol: (r.symbol as string),
+                fundingRate: Number((r.fundingRate ?? r.currentFundingRate) ?? 0),
+                nextFundingTime: (r.nextFundingTimestamp ?? r.nextFundingTime ?? null) as number | null,
                 predictedFundingRate: r.predictedFundingRate != null ? Number(r.predictedFundingRate) : null,
-                timestamp: r.timestamp ?? null,
+                timestamp: (r.timestamp ?? null) as number | null,
             }));
         }
         // Fallback: iterate using single fetchFundingRate calls
