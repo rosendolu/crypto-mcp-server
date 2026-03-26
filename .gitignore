@@ -3,3 +3,4 @@ dist/
 *.local
 .cursor/rules/crypto/
 .temp
+package-lock.json
