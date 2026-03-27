@@ -575,7 +575,7 @@ export function registerTools(server: any) {
             interval: z.string().describe('Candlestick interval, e.g., 1m, 5m, 1h, 1d'),
             options: z.record(z.any()).optional().describe('Additional options for fetchOHLCV'),
             exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
-            limit: z.number().int().positive().optional().describe('Number of candles to return (default: exchange default, typically 100–500)'),
+            limit: z.number().int().positive().max(5000).optional().describe('Number of candles to return (default: exchange default, typically 100–500; exchange may cap this)'),
         },
         async ({
             symbol,
@@ -620,7 +620,7 @@ export function registerTools(server: any) {
             interval: z.string().describe('Candlestick interval, e.g., 1m, 5m, 1h, 1d'),
             options: z.record(z.any()).optional().describe('Additional options for fetchOHLCV'),
             exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
-            limit: z.number().int().positive().optional().describe('Number of candles to fetch for indicator calculation (default: exchange default)'),
+            limit: z.number().int().positive().max(5000).optional().describe('Number of candles to fetch for indicator calculation (default: exchange default; exchange may cap this)'),
             indicators: z
                 .array(z.string())
                 .default(['macd', 'rsi', 'bollinger bands', 'kdj', 'ema', 'atr', 'cmf'])
