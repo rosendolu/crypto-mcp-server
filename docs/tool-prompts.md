@@ -251,3 +251,29 @@ This document provides prompt templates for all available tools in the Crypto MC
     > 计算 [exchange] 上 [symbol] 的 [interval] K 线的 [indicators] 指标。
 
 ---
+
+## Funding Rate
+
+### 21. fundingRate
+
+-   **Function:** Get the current funding rate for a single perpetual futures symbol on a specified exchange.
+-   **Parameters:**
+    -   `symbol`: Perpetual futures trading pair symbol, e.g., ETH/USDT, BTC/USDT
+    -   `exchange` (optional): Exchange id, e.g., binance, bybit, okx, gate, etc.
+-   **Prompt (EN):**
+    > What is the current funding rate for [symbol] on [exchange]?
+-   **Prompt (CN):**
+    > 查询 [exchange] 上 [symbol] 的当前资金费率。
+
+### 22. fundingRates
+
+-   **Function:** Get funding rates for multiple perpetual futures symbols, or all available symbols on a specified exchange.
+-   **Parameters:**
+    -   `symbols` (optional): List of perpetual futures symbols, e.g., ["BTC/USDT", "ETH/USDT"]. Omit for all available.
+    -   `exchange` (optional): Exchange id, e.g., binance, bybit, okx, gate, etc.
+-   **Prompt (EN):**
+    > Show funding rates for [symbols] on [exchange].
+-   **Prompt (CN):**
+    > 查询 [exchange] 上 [symbols] 的资金费率。
+
+---
