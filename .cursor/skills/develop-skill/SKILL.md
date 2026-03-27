@@ -59,14 +59,17 @@ This skill is used to implement a new change in this repo while enforcing:
 
 ### Phase 5: Close-out
 
-After the loop completes, provide:
+After the review loop completes (i.e., all `code-review` findings are resolved and pushed to the same PR), provide:
 
 - A short summary of the final changes made after review.
-- The PR link/identifier.
-- A confirmation that all `code-review` findings were fixed and pushed to the same PR.
+- The full PR URL that the fixes were pushed to.
+- A confirmation that all `code-review` findings were fixed and pushed to that PR.
+
+Then wait for a human to merge the PR manually in GitHub (do not auto-merge from the CLI).
 
 ## Notes / Guardrails
 
 - If the user requests an additional unrelated change while the PR is open, treat it as a new development cycle: start a new feature branch and a new PR (do not mix unrelated scope into the current PR).
 - If `gh` is not configured or PR creation fails, ask the user for permission to fall back to manual PR instructions.
+- PR merge must be manual: this skill should only open the PR and push updates after review; it must not perform the merge.
 
