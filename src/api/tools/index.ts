@@ -575,17 +575,20 @@ export function registerTools(server: any) {
             interval: z.string().describe('Candlestick interval, e.g., 1m, 5m, 1h, 1d'),
             options: z.record(z.any()).optional().describe('Additional options for fetchOHLCV'),
             exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
+            limit: z.number().int().positive().optional().describe('Number of candles to return (default: exchange default, typically 100–500)'),
         },
         async ({
             symbol,
             interval,
             options,
             exchange,
+            limit,
         }: {
             symbol: string;
             interval: string;
             options?: object;
             exchange?: string;
+            limit?: number;
         }) => {
             if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
             logger.debug('Tool candlesticks called with params: %j', {
@@ -593,9 +596,10 @@ export function registerTools(server: any) {
                 interval,
                 options,
                 exchange,
+                limit,
             });
             try {
-                const result = await ccxtProvider.candlesticks(symbol, interval, options, exchange);
+                const result = await ccxtProvider.candlesticks(symbol, interval, options, exchange, limit);
                 if (!result) {
                     logger.error('No candlestick data returned for %s %s on %s', symbol, interval, exchange);
                     return { content: [{ type: 'text', text: 'No candlestick data available.' }], isError: true };
@@ -616,6 +620,7 @@ export function registerTools(server: any) {
             interval: z.string().describe('Candlestick interval, e.g., 1m, 5m, 1h, 1d'),
             options: z.record(z.any()).optional().describe('Additional options for fetchOHLCV'),
             exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
+            limit: z.number().int().positive().optional().describe('Number of candles to fetch for indicator calculation (default: exchange default)'),
             indicators: z
                 .array(z.string())
                 .default(['macd', 'rsi', 'bollinger bands', 'kdj', 'ema', 'atr', 'cmf'])
@@ -633,6 +638,7 @@ export function registerTools(server: any) {
             interval,
             options,
             exchange,
+            limit,
             indicators,
             period = 14,
             fastPeriod = 12,
@@ -644,6 +650,7 @@ export function registerTools(server: any) {
             interval: string;
             options?: object;
             exchange?: string;
+            limit?: number;
             indicators: string[];
             period?: number;
             fastPeriod?: number;
@@ -651,7 +658,7 @@ export function registerTools(server: any) {
             signalPeriod?: number;
             stdDev?: number;
         }) => {
-            const candlesticks = await ccxtProvider.candlesticks(symbol, interval, options, exchange);
+            const candlesticks = await ccxtProvider.candlesticks(symbol, interval, options, exchange, limit);
             if (!candlesticks) {
                 logger.error('No candlestick data returned for %s %s on %s', symbol, interval, exchange);
                 return { content: [{ type: 'text', text: 'No candlestick data available.' }], isError: true };
@@ -661,6 +668,7 @@ export function registerTools(server: any) {
                 symbol,
                 interval,
                 exchange,
+                limit,
                 indicators,
                 period,
                 fastPeriod,

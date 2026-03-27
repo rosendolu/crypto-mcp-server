@@ -350,13 +350,14 @@ export async function candlesticks(
     symbol: string,
     interval: string,
     options?: object,
-    exchangeId?: ExchangeId
+    exchangeId?: ExchangeId,
+    limit?: number
 ): Promise<Candlestick[] | null> {
     const exchange = getExchange(exchangeId);
     try {
         const adaptedSymbol = adaptSymbolForExchange(symbol, exchangeId);
-        logger.debug('Called candlesticks with params: %j', { symbol, adaptedSymbol, interval, options, exchangeId });
-        const ohlcv = await exchange.fetchOHLCV(adaptedSymbol, interval, undefined, undefined, options);
+        logger.debug('Called candlesticks with params: %j', { symbol, adaptedSymbol, interval, options, exchangeId, limit });
+        const ohlcv = await exchange.fetchOHLCV(adaptedSymbol, interval, undefined, limit, options);
         logger.info('Fetched candlesticks for %s %s', adaptedSymbol, interval);
 
         const result = ohlcv.map((c: any) => ({
