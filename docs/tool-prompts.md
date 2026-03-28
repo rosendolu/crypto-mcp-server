@@ -228,12 +228,13 @@ This document provides prompt templates for all available tools in the Crypto MC
 -   **Parameters:**
     -   `symbol`: Trading pair symbol
     -   `interval`: Candlestick interval, e.g., 1m, 5m, 1h, 1d
-    -   `options` (optional): Additional options
+    -   `limit` (optional): Number of candles to return (default: exchange default, typically 100–500)
+    -   `options` (optional): Additional options for fetchOHLCV
     -   `exchange` (optional): Exchange id
 -   **Prompt (EN):**
-    > Show candlestick data for [symbol] on [exchange] with interval [interval].
+    > Show the last [limit] candlesticks for [symbol] on [exchange] with interval [interval].
 -   **Prompt (CN):**
-    > 查询 [exchange] 上 [symbol] 的 [interval] K 线数据。
+    > 查询 [exchange] 上 [symbol] 的 [interval] K 线数据，返回最近 [limit] 根。
 
 ### 20. calculateIndicators
 
@@ -241,12 +242,13 @@ This document provides prompt templates for all available tools in the Crypto MC
 -   **Parameters:**
     -   `symbol`: Trading pair symbol
     -   `interval`: Candlestick interval
+    -   `limit` (optional): Number of candles to fetch for indicator calculation (default: exchange default)
     -   `options` (optional): Additional options
     -   `exchange` (optional): Exchange id
     -   `indicators`: Indicators to calculate
     -   `period`, `fastPeriod`, `slowPeriod`, `signalPeriod`, `stdDev` (optional): Indicator parameters
 -   **Prompt (EN):**
-    > Calculate [indicators] for [symbol] on [exchange] with interval [interval].
+    > Calculate [indicators] for [symbol] on [exchange] with interval [interval] using the last [limit] candles.
 -   **Prompt (CN):**
     > 计算 [exchange] 上 [symbol] 的 [interval] K 线的 [indicators] 指标。
 
