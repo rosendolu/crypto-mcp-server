@@ -6,6 +6,7 @@ import {
     calculateBollingerBands,
     calculateCMF,
     calculateEMA,
+    calculateIndicator,
     calculateKDJ,
     calculateMA,
     calculateMACD,
@@ -128,5 +129,38 @@ describe('All Indicator Calculations', () => {
     it('returns On-chain Large Transfer placeholder', () => {
         const result = getOnChainLargeTransferPlaceholder();
         expect(typeof result).toBe('boolean');
+    });
+});
+
+describe('calculateIndicator dispatcher', () => {
+    const close = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const high = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    const low = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const open = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const volume = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+    const input: IndicatorInput = { values: close, period: 3, high, low, close, open, volume };
+
+    it('dispatches "bollinger bands" (with space) correctly — regression for whitespace bug', () => {
+        const result = calculateIndicator('bollinger bands', input);
+        expect(Array.isArray(result)).toBe(true);
+        expect((result as any[]).length).toBeGreaterThan(0);
+        expect((result as any[])[0]).toHaveProperty('lower');
+        expect((result as any[])[0]).toHaveProperty('upper');
+    });
+
+    it('dispatches "bollingerbands" (no space) correctly', () => {
+        const result = calculateIndicator('bollingerbands', input);
+        expect(Array.isArray(result)).toBe(true);
+        expect((result as any[]).length).toBeGreaterThan(0);
+    });
+
+    it('dispatches "bb" alias correctly', () => {
+        const result = calculateIndicator('bb', input);
+        expect(Array.isArray(result)).toBe(true);
+        expect((result as any[]).length).toBeGreaterThan(0);
+    });
+
+    it('throws for unknown indicator type', () => {
+        expect(() => calculateIndicator('unknownindicator', input)).toThrow('Unknown indicator type');
     });
 });
