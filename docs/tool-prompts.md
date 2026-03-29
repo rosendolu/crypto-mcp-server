@@ -245,7 +245,7 @@ This document provides prompt templates for all available tools in the Crypto MC
     -   `limit` (optional): Number of candles to fetch for indicator calculation (default: exchange default)
     -   `options` (optional): Additional options
     -   `exchange` (optional): Exchange id
-    -   `indicators`: Indicators to calculate
+    -   `indicators`: Indicators to calculate. Supported values: `macd`, `rsi`, `bollingerbands` (alias: `bollinger bands`), `kdj`, `ema`, `ema7`, `ema30`, `ema120`, `sma`, `ma`, `atr`, `adx`, `dmi`, `stochastic`, `cmf`, `obv`, `mfi`, `volumespike`
     -   `period`, `fastPeriod`, `slowPeriod`, `signalPeriod`, `stdDev` (optional): Indicator parameters
 -   **Prompt (EN):**
     > Calculate [indicators] for [symbol] on [exchange] with interval [interval] using the last [limit] candles.

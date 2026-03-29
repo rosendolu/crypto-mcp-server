@@ -179,7 +179,8 @@ export function calculateIndicator(
     type: string,
     input: IndicatorInput
 ): IndicatorResult | IndicatorResult[] | number[] | boolean | number | null {
-    switch (type.toLowerCase()) {
+    const normalized = type.toLowerCase().replace(/\s+/g, '');
+    switch (normalized) {
         case 'ma':
         case 'sma':
             return calculateMA(input);

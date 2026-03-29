@@ -623,9 +623,9 @@ export function registerTools(server: any) {
             limit: z.number().int().positive().max(5000).optional().describe('Number of candles to fetch for indicator calculation (default: exchange default; exchange may cap this)'),
             indicators: z
                 .array(z.string())
-                .default(['macd', 'rsi', 'bollinger bands', 'kdj', 'ema', 'atr', 'cmf'])
+                .default(['macd', 'rsi', 'bollingerbands', 'kdj', 'ema', 'atr', 'cmf'])
                 .describe(
-                    'Indicators to calculate. Supported names: "macd", "rsi", "bollinger bands" (aliases: "bollingerbands", "bb"), "kdj", "ema", "ema7", "ema30", "ema120", "ma", "sma", "atr", "adx", "dmi", "stochastic", "obv", "mfi", "cmf", "volumespike"'
+                    'Indicators to calculate, supported: ["macd", "rsi", "bollingerbands" (alias: "bollinger bands"), "kdj", "ema", "ema7", "ema30", "ema120", "sma", "ma", "atr", "adx", "dmi", "stochastic", "cmf", "obv", "mfi", "volumespike"]'
                 ),
             period: z.number().optional().default(14).describe('Default period for indicators'),
             fastPeriod: z.number().optional().default(12).describe('Fast period for MACD'),
