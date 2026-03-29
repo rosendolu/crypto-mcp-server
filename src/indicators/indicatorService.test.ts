@@ -130,6 +130,15 @@ describe('All Indicator Calculations', () => {
         const result = getOnChainLargeTransferPlaceholder();
         expect(typeof result).toBe('boolean');
     });
+
+    it('calculates Bollinger Bands via "bollinger bands" alias (space-separated)', () => {
+        const result = calculateIndicator('bollinger bands', input);
+        expect(Array.isArray(result)).toBe(true);
+        expect((result as any[]).length).toBeGreaterThan(0);
+        expect((result as any[])[0]).toHaveProperty('lower');
+        expect((result as any[])[0]).toHaveProperty('middle');
+        expect((result as any[])[0]).toHaveProperty('upper');
+    });
 });
 
 describe('calculateIndicator dispatcher', () => {
