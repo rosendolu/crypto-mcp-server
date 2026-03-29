@@ -1,5 +1,40 @@
 import { IndicatorInput, IndicatorResult } from '@/types/indicators.types';
-import { ADX, ATR, BollingerBands, EMA, MACD, MFI, OBV, RSI, SMA, Stochastic } from 'technicalindicators';
+import {
+    ADX, ATR, BollingerBands, EMA, MACD, MFI, OBV, RSI, SMA, Stochastic,
+    WilliamsR, PSAR, CCI, VWAP, ROC, TRIX, ADL, ForceIndex, AwesomeOscillator,
+    StochasticRSI, IchimokuCloud, KeltnerChannels, ChandelierExit, KST,
+} from 'technicalindicators';
+
+// PSAR default parameters
+const PSAR_STEP = 0.02;
+const PSAR_MAX = 0.2;
+// MACD default fast period (also used for AwesomeOscillator fast period)
+const MACD_FAST_DEFAULT = 5;
+// AwesomeOscillator default slow period
+const AO_SLOW_DEFAULT = 34;
+// KeltnerChannels default multiplier
+const KC_MULTIPLIER_DEFAULT = 2;
+// ChandelierExit default multiplier
+const CHANDELIER_MULTIPLIER_DEFAULT = 3;
+// IchimokuCloud standard periods
+const ICHIMOKU_CONVERSION_PERIOD = 9;
+const ICHIMOKU_BASE_PERIOD = 26;
+const ICHIMOKU_SPAN_PERIOD = 52;
+const ICHIMOKU_DISPLACEMENT = 26;
+// KST standard ROC periods
+const KST_ROC1 = 10;
+const KST_ROC2 = 13;
+const KST_ROC3 = 14;
+const KST_ROC4 = 15;
+// KST standard SMA periods
+const KST_SMA1 = 10;
+const KST_SMA2 = 13;
+const KST_SMA3 = 14;
+const KST_SMA4 = 9;
+// KST default signal period
+const KST_SIGNAL_DEFAULT = 9;
+// StochasticRSI default smoothing period
+const STOCHRSI_SMOOTH_DEFAULT = 3;
 
 /**
  * Calculate Simple Moving Average (SMA)
@@ -147,6 +182,174 @@ export function calculateCMF(input: IndicatorInput): number[] {
 }
 
 /**
+ * Calculate Williams %R
+ * Requires: high[], low[], close[], period
+ */
+export function calculateWilliamsR(input: IndicatorInput): number[] {
+    return WilliamsR.calculate({ high: input.high!, low: input.low!, close: input.close!, period: input.period! });
+}
+
+/**
+ * Calculate Parabolic SAR
+ * Requires: high[], low[]
+ * Uses standard step=0.02, max=0.2
+ */
+export function calculatePSAR(input: IndicatorInput): number[] {
+    return PSAR.calculate({ high: input.high!, low: input.low!, step: PSAR_STEP, max: PSAR_MAX });
+}
+
+/**
+ * Calculate Commodity Channel Index (CCI)
+ * Requires: high[], low[], close[], period
+ */
+export function calculateCCI(input: IndicatorInput): number[] {
+    return CCI.calculate({ high: input.high!, low: input.low!, close: input.close!, period: input.period! });
+}
+
+/**
+ * Calculate Volume Weighted Average Price (VWAP)
+ * Requires: high[], low[], close[], volume[]
+ */
+export function calculateVWAP(input: IndicatorInput): number[] {
+    return VWAP.calculate({ high: input.high!, low: input.low!, close: input.close!, volume: input.volume! });
+}
+
+/**
+ * Calculate Rate of Change (ROC)
+ * Requires: values[], period
+ */
+export function calculateROC(input: IndicatorInput): number[] {
+    return ROC.calculate({ values: input.values, period: input.period! });
+}
+
+/**
+ * Calculate TRIX (Triple Exponential Average)
+ * Requires: values[], period
+ */
+export function calculateTRIX(input: IndicatorInput): number[] {
+    return TRIX.calculate({ values: input.values, period: input.period! });
+}
+
+/**
+ * Calculate Accumulation/Distribution Line (ADL)
+ * Requires: high[], low[], close[], volume[]
+ */
+export function calculateADL(input: IndicatorInput): number[] {
+    return ADL.calculate({ high: input.high!, low: input.low!, close: input.close!, volume: input.volume! });
+}
+
+/**
+ * Calculate Force Index
+ * Requires: close[], volume[], period
+ */
+export function calculateForceIndex(input: IndicatorInput): number[] {
+    return ForceIndex.calculate({ close: input.close!, volume: input.volume!, period: input.period! });
+}
+
+/**
+ * Calculate Awesome Oscillator
+ * Requires: high[], low[]
+ * Uses fastPeriod (default 5) and slowPeriod (default 34)
+ */
+export function calculateAwesomeOscillator(input: IndicatorInput): number[] {
+    return AwesomeOscillator.calculate({
+        high: input.high!,
+        low: input.low!,
+        fastPeriod: input.fastPeriod || MACD_FAST_DEFAULT,
+        slowPeriod: input.slowPeriod || AO_SLOW_DEFAULT,
+    });
+}
+
+/**
+ * Calculate Stochastic RSI
+ * Requires: values[], period (used as rsiPeriod and stochasticPeriod), signalPeriod (default 3)
+ * Returns: Array of {stochRSI, k, d}
+ */
+export function calculateStochasticRSI(input: IndicatorInput): IndicatorResult[] {
+    return StochasticRSI.calculate({
+        values: input.values,
+        rsiPeriod: input.period!,
+        stochasticPeriod: input.period!,
+        kPeriod: input.signalPeriod || STOCHRSI_SMOOTH_DEFAULT,
+        dPeriod: input.signalPeriod || STOCHRSI_SMOOTH_DEFAULT,
+    });
+}
+
+/**
+ * Calculate Ichimoku Cloud
+ * Requires: high[], low[]
+ * Uses standard Ichimoku periods: conversion=9, base=26, span=52, displacement=26
+ * Returns: Array of {conversion, base, spanA, spanB}
+ */
+export function calculateIchimokuCloud(input: IndicatorInput): IndicatorResult[] {
+    return IchimokuCloud.calculate({
+        high: input.high!,
+        low: input.low!,
+        conversionPeriod: ICHIMOKU_CONVERSION_PERIOD,
+        basePeriod: ICHIMOKU_BASE_PERIOD,
+        spanPeriod: ICHIMOKU_SPAN_PERIOD,
+        displacement: ICHIMOKU_DISPLACEMENT,
+    });
+}
+
+/**
+ * Calculate Keltner Channels
+ * Requires: high[], low[], close[], period
+ * Uses period for both maPeriod and atrPeriod; multiplier from stdDev (default 2)
+ * Returns: Array of {middle, upper, lower}
+ */
+export function calculateKeltnerChannels(input: IndicatorInput): IndicatorResult[] {
+    return KeltnerChannels.calculate({
+        high: input.high!,
+        low: input.low!,
+        close: input.close!,
+        maPeriod: input.period!,
+        atrPeriod: input.period!,
+        multiplier: input.stdDev || KC_MULTIPLIER_DEFAULT,
+        useSMA: false,
+    });
+}
+
+/**
+ * Calculate Chandelier Exit
+ * Requires: high[], low[], close[], period
+ * Uses multiplier from stdDev (default 3)
+ * Returns: Array of {exitLong, exitShort}
+ */
+export function calculateChandelierExit(input: IndicatorInput): IndicatorResult[] {
+    // The technicalindicators d.ts declares number[] but the actual return is {exitLong, exitShort}[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (ChandelierExit.calculate as any)({
+        high: input.high!,
+        low: input.low!,
+        close: input.close!,
+        period: input.period!,
+        multiplier: input.stdDev || CHANDELIER_MULTIPLIER_DEFAULT,
+    }) as IndicatorResult[];
+}
+
+/**
+ * Calculate KST (Know Sure Thing oscillator)
+ * Requires: values[]
+ * Uses standard KST parameters; signalPeriod from input (default 9)
+ * Returns: Array of {kst, signal?}
+ */
+export function calculateKST(input: IndicatorInput): IndicatorResult[] {
+    return KST.calculate({
+        values: input.values,
+        ROCPer1: KST_ROC1,
+        ROCPer2: KST_ROC2,
+        ROCPer3: KST_ROC3,
+        ROCPer4: KST_ROC4,
+        SMAROCPer1: KST_SMA1,
+        SMAROCPer2: KST_SMA2,
+        SMAROCPer3: KST_SMA3,
+        SMAROCPer4: KST_SMA4,
+        signalPeriod: input.signalPeriod || KST_SIGNAL_DEFAULT,
+    });
+}
+
+/**
  * Detect Volume Spike
  * Returns true if the latest volume > 2x average of previous N days
  */
@@ -215,6 +418,43 @@ export function calculateIndicator(
             return calculateATR(input);
         case 'mfi':
             return calculateMFI(input);
+        case 'williamsr':
+        case 'willr':
+            return calculateWilliamsR(input);
+        case 'psar':
+        case 'parabolicsar':
+            return calculatePSAR(input);
+        case 'cci':
+            return calculateCCI(input);
+        case 'vwap':
+            return calculateVWAP(input);
+        case 'roc':
+            return calculateROC(input);
+        case 'trix':
+            return calculateTRIX(input);
+        case 'adl':
+            return calculateADL(input);
+        case 'forceindex':
+        case 'fi':
+            return calculateForceIndex(input);
+        case 'awesomeoscillator':
+        case 'ao':
+            return calculateAwesomeOscillator(input);
+        case 'stochasticrsi':
+        case 'stochrsi':
+            return calculateStochasticRSI(input);
+        case 'ichimokucloud':
+        case 'ichimoku':
+            return calculateIchimokuCloud(input);
+        case 'keltnerchannel':
+        case 'keltnerchannels':
+        case 'kc':
+            return calculateKeltnerChannels(input);
+        case 'chandelierexit':
+        case 'chandelier':
+            return calculateChandelierExit(input);
+        case 'kst':
+            return calculateKST(input);
         case 'volumespike':
             return detectVolumeSpike(input.volume!, input.period || 3);
         case 'onchainlargetransfer':

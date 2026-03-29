@@ -625,7 +625,16 @@ export function registerTools(server: any) {
                 .array(z.string())
                 .default(['macd', 'rsi', 'bollingerbands', 'kdj', 'ema', 'atr', 'cmf'])
                 .describe(
-                    'Indicators to calculate, supported: ["macd", "rsi", "bollingerbands" (alias: "bollinger bands"), "kdj", "ema", "ema7", "ema30", "ema120", "sma", "ma", "atr", "adx", "dmi", "stochastic", "cmf", "obv", "mfi", "volumespike"]'
+                    'Indicators to calculate. Supported keys: ' +
+                        '"macd", "rsi", "bollingerbands" (aliases: "bb", "bollinger bands"), "kdj", ' +
+                        '"ema", "ema7", "ema30", "ema120", "sma", "ma", "atr", "adx", "dmi", "stochastic", ' +
+                        '"cmf", "obv", "mfi", "volumespike", ' +
+                        '"williamsr" (alias: "willr"), "psar" (alias: "parabolicsar"), "cci", "vwap", ' +
+                        '"roc", "trix", "adl", "forceindex" (alias: "fi"), ' +
+                        '"awesomeoscillator" (alias: "ao"), "stochasticrsi" (alias: "stochrsi"), ' +
+                        '"ichimokucloud" (alias: "ichimoku"), ' +
+                        '"keltnerchannels" (aliases: "keltnerchannel", "kc"), ' +
+                        '"chandelierexit" (alias: "chandelier"), "kst"'
                 ),
             period: z.number().optional().default(14).describe('Default period for indicators'),
             fastPeriod: z.number().optional().default(12).describe('Fast period for MACD'),
