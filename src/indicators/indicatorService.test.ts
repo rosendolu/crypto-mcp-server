@@ -1,19 +1,33 @@
 import { IndicatorInput } from '@/types/indicators.types';
 import { describe, expect, it } from 'vitest';
 import {
+    calculateADL,
     calculateADX,
     calculateATR,
+    calculateAwesomeOscillator,
     calculateBollingerBands,
+    calculateCCI,
+    calculateChandelierExit,
     calculateCMF,
     calculateEMA,
+    calculateForceIndex,
+    calculateIchimokuCloud,
     calculateIndicator,
     calculateKDJ,
+    calculateKeltnerChannels,
+    calculateKST,
     calculateMA,
     calculateMACD,
     calculateMFI,
     calculateOBV,
+    calculatePSAR,
+    calculateROC,
     calculateRSI,
     calculateStochastic,
+    calculateStochasticRSI,
+    calculateTRIX,
+    calculateVWAP,
+    calculateWilliamsR,
     detectVolumeSpike,
     getOnChainLargeTransferPlaceholder,
 } from './indicatorService';
@@ -171,5 +185,249 @@ describe('calculateIndicator dispatcher', () => {
 
     it('throws for unknown indicator type', () => {
         expect(() => calculateIndicator('unknownindicator', input)).toThrow('Unknown indicator type');
+    });
+});
+
+describe('Extended indicators (add-extended-indicators)', () => {
+    // Realistic-enough test data: 50 candles with slight trend and noise
+    const n = 50;
+    const close = Array.from({ length: n }, (_, i) => 44 + i * 0.3 + Math.sin(i) * 2);
+    const high = close.map(v => v + 1.5);
+    const low = close.map(v => v - 1.5);
+    const volume = close.map(() => 1_000_000);
+    const baseInput: IndicatorInput = { values: close, period: 14, high, low, close, volume };
+
+    it('calculateWilliamsR returns number[]', () => {
+        const result = calculateWilliamsR(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(typeof result[0]).toBe('number');
+    });
+
+    it('calculatePSAR returns number[]', () => {
+        const result = calculatePSAR(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(typeof result[0]).toBe('number');
+    });
+
+    it('calculateCCI returns number[]', () => {
+        const result = calculateCCI(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(typeof result[0]).toBe('number');
+    });
+
+    it('calculateVWAP returns number[]', () => {
+        const result = calculateVWAP(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(typeof result[0]).toBe('number');
+    });
+
+    it('calculateROC returns number[]', () => {
+        const result = calculateROC(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(typeof result[0]).toBe('number');
+    });
+
+    it('calculateTRIX returns number[]', () => {
+        const result = calculateTRIX(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(typeof result[0]).toBe('number');
+    });
+
+    it('calculateADL returns number[]', () => {
+        // Use asymmetric close so ADL is non-zero
+        const asymClose = close.map((v, i) => (i % 3 === 0 ? v + 1 : v - 0.5));
+        const result = calculateADL({ ...baseInput, close: asymClose });
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(typeof result[0]).toBe('number');
+    });
+
+    it('calculateForceIndex returns number[]', () => {
+        const result = calculateForceIndex(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(typeof result[0]).toBe('number');
+    });
+
+    it('calculateAwesomeOscillator returns number[]', () => {
+        const result = calculateAwesomeOscillator(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(typeof result[0]).toBe('number');
+    });
+
+    it('calculateStochasticRSI returns IndicatorResult[]', () => {
+        const result = calculateStochasticRSI(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(result[0]).toHaveProperty('stochRSI');
+        expect(result[0]).toHaveProperty('k');
+        expect(result[0]).toHaveProperty('d');
+    });
+
+    it('calculateIchimokuCloud returns IndicatorResult[] with 200 candles', () => {
+        const bigClose = Array.from({ length: 200 }, (_, i) => 44 + i * 0.3 + Math.sin(i) * 5);
+        const bigHigh = bigClose.map(v => v + 2);
+        const bigLow = bigClose.map(v => v - 2);
+        const bigInput: IndicatorInput = { values: bigClose, period: 26, high: bigHigh, low: bigLow, close: bigClose };
+        const result = calculateIchimokuCloud(bigInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(result[0]).toHaveProperty('conversion');
+        expect(result[0]).toHaveProperty('base');
+        expect(result[0]).toHaveProperty('spanA');
+        expect(result[0]).toHaveProperty('spanB');
+    });
+
+    it('calculateKeltnerChannels returns IndicatorResult[]', () => {
+        const result = calculateKeltnerChannels(baseInput);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(result[0]).toHaveProperty('middle');
+        expect(result[0]).toHaveProperty('upper');
+        expect(result[0]).toHaveProperty('lower');
+    });
+
+    it('calculateChandelierExit returns IndicatorResult[]', () => {
+        const result = calculateChandelierExit({ ...baseInput, period: 22 });
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(result[0]).toHaveProperty('exitLong');
+        expect(result[0]).toHaveProperty('exitShort');
+    });
+
+    it('calculateKST returns IndicatorResult[]', () => {
+        const kstClose = Array.from({ length: 60 }, (_, i) => 44 + i * 0.3 + Math.sin(i) * 5);
+        const result = calculateKST({ values: kstClose, period: 9 });
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+        expect(result[0]).toHaveProperty('kst');
+    });
+
+    // Dispatcher integration tests for new indicators
+    it('dispatcher: williamsr alias works', () => {
+        const r = calculateIndicator('williamsr', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+        expect((r as number[]).length).toBeGreaterThan(0);
+    });
+
+    it('dispatcher: willr alias works', () => {
+        const r = calculateIndicator('willr', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: psar alias works', () => {
+        const r = calculateIndicator('psar', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+        expect((r as number[]).length).toBeGreaterThan(0);
+    });
+
+    it('dispatcher: cci works', () => {
+        const r = calculateIndicator('cci', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: vwap works', () => {
+        const r = calculateIndicator('vwap', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: roc works', () => {
+        const r = calculateIndicator('roc', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: trix works', () => {
+        const r = calculateIndicator('trix', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: adl works', () => {
+        const r = calculateIndicator('adl', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: forceindex works', () => {
+        const r = calculateIndicator('forceindex', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: fi alias works', () => {
+        const r = calculateIndicator('fi', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: awesomeoscillator works', () => {
+        const r = calculateIndicator('awesomeoscillator', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: ao alias works', () => {
+        const r = calculateIndicator('ao', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: stochasticrsi works', () => {
+        const r = calculateIndicator('stochasticrsi', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: stochrsi alias works', () => {
+        const r = calculateIndicator('stochrsi', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: ichimokucloud works (200 candles)', () => {
+        const bigClose = Array.from({ length: 200 }, (_, i) => 44 + i * 0.3 + Math.sin(i) * 5);
+        const bigHigh = bigClose.map(v => v + 2);
+        const bigLow = bigClose.map(v => v - 2);
+        const bigInput: IndicatorInput = { values: bigClose, period: 26, high: bigHigh, low: bigLow, close: bigClose };
+        const r = calculateIndicator('ichimokucloud', bigInput);
+        expect(Array.isArray(r)).toBe(true);
+        expect((r as unknown[]).length).toBeGreaterThan(0);
+    });
+
+    it('dispatcher: ichimoku alias works', () => {
+        const bigClose = Array.from({ length: 200 }, (_, i) => 44 + i * 0.3 + Math.sin(i) * 5);
+        const bigHigh = bigClose.map(v => v + 2);
+        const bigLow = bigClose.map(v => v - 2);
+        const bigInput: IndicatorInput = { values: bigClose, period: 26, high: bigHigh, low: bigLow, close: bigClose };
+        const r = calculateIndicator('ichimoku', bigInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: keltnerchannels works', () => {
+        const r = calculateIndicator('keltnerchannels', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+        expect((r as unknown[]).length).toBeGreaterThan(0);
+    });
+
+    it('dispatcher: kc alias works', () => {
+        const r = calculateIndicator('kc', baseInput);
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: chandelierexit works', () => {
+        const r = calculateIndicator('chandelierexit', { ...baseInput, period: 22 });
+        expect(Array.isArray(r)).toBe(true);
+        expect((r as unknown[]).length).toBeGreaterThan(0);
+    });
+
+    it('dispatcher: chandelier alias works', () => {
+        const r = calculateIndicator('chandelier', { ...baseInput, period: 22 });
+        expect(Array.isArray(r)).toBe(true);
+    });
+
+    it('dispatcher: kst works', () => {
+        const kstClose = Array.from({ length: 60 }, (_, i) => 44 + i * 0.3 + Math.sin(i) * 5);
+        const r = calculateIndicator('kst', { values: kstClose, period: 9 });
+        expect(Array.isArray(r)).toBe(true);
+        expect((r as unknown[]).length).toBeGreaterThan(0);
     });
 });
