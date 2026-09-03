@@ -16,4 +16,4 @@
 
 // Repeat for other functions: bookTickers, depth, prevDay, candlesticks, balance, dustLog, buy, sell, etc.
 
-// Make sure to handle all possible errors, log detailed messages, and return consistent types.
+// Wrap each function call with try-catch blocks to improve error handling and return consistent results, logging errors with detailed messages.
