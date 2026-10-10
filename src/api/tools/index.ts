@@ -295,7 +295,7 @@ export function registerTools(server: any) {
             exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
         },
         async ({ symbol, orderId, exchange }: { symbol: string; orderId: string; exchange?: string }) => {
-            if (!exchange) logg er.warn('No exchange specified, defaulting to binance.');
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
             logger.debug('Tool orderStatus called with params: %j', { symbol, orderId, exchange });
             try {
                 const result = await ccxtProvider.orderStatus(symbol, orderId, exchange);
