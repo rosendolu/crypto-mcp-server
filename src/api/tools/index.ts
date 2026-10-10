@@ -334,6 +334,230 @@ export function registerTools(server: any) {
             }
         }
     );
-    // The rest of tools remain unchanged below, but with added defensive checks where appropriate
-    // ...
-}
+    server.tool(
+        'allOrders',
+        {
+            symbol: z.string().describe('Trading pair symbol, e.g., ETH/USDT, BTC/USDT'),
+            exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
+        },
+        async ({ symbol, exchange }: { symbol: string; exchange?: string }) => {
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
+            logger.debug('Tool allOrders called with params: %j', { symbol, exchange });
+            try {
+                const result = await ccxtProvider.allOrders(symbol, exchange);
+                if (!result) return { content: [{ type: 'text', text: 'No data.' }], isError: true };
+                const headers = [
+                    'Order ID',
+                    'Symbol',
+                    'Status',
+                    'Type',
+                    'Side',
+                    'Price',
+                    'Amount',
+                    'Filled',
+                    'Remaining',
+                    'Timestamp',
+                ];
+                const rows = result.map((o: any) => [
+                    o.orderId,
+                    o.symbol,
+                    o.status,
+                    o.type,
+                    o.side,
+                    o.price,
+                    o.amount,
+                    o.filled,
+                    o.remaining,
+                    o.timestamp,
+                ]);
+                logger.debug('Tool allOrders result: %j', result);
+                return { content: [{ type: 'text', text: toMarkdownTable(headers, rows) }] };
+            } catch (error) {
+                logger.error('Error in allOrders tool: %s', error);
+                return { content: [{ type: 'text', text: String(error) }], isError: true };
+            }
+        }
+    );
+
+    server.tool(
+        'openOrders',
+        {
+            symbol: z.string().describe('Trading pair symbol, e.g., ETH/USDT, BTC/USDT'),
+            exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
+        },
+        async ({ symbol, exchange }: { symbol: string; exchange?: string }) => {
+            const adaptedSymbol = adaptSymbolForExchange(symbol, exchange);
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
+            logger.debug('Tool openOrders called with params: %j', { symbol, exchange });
+            try {
+                const result = await ccxtProvider.openOrders(adaptedSymbol, exchange);
+                if (!result) return { content: [{ type: 'text', text: 'No data.' }], isError: true };
+                const headers = [
+                    'Order ID',
+                    'Symbol',
+                    'Status',
+                    'Type',
+                    'Side',
+                    'Price',
+                    'Amount',
+                    'Filled',
+                    'Remaining',
+                    'Timestamp',
+                ];
+                const rows = result.map((o: any) => [
+                    o.orderId,
+                    o.symbol,
+                    o.status,
+                    o.type,
+                    o.side,
+                    o.price,
+                    o.amount,
+                    o.filled,
+                    o.remaining,
+                    o.timestamp,
+                ]);
+                logger.debug('Tool openOrders result: %j', result);
+                return { content: [{ type: 'text', text: toMarkdownTable(headers, rows) }] };
+            } catch (error) {
+                logger.error('Error in openOrders tool: %s', error);
+                return { content: [{ type: 'text', text: String(error) }], isError: true };
+            }
+        }
+    );
+    server.tool(
+        'cancel',
+        {
+            symbol: z.string().describe('Trading pair symbol, e.g., ETH/USDT, BTC/USDT'),
+            orderId: z.string(),
+            exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
+        },
+        async ({ symbol, orderId, exchange }: { symbol: string; orderId: string; exchange?: string }) => {
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
+            logger.debug('Tool cancel called with params: %j', { symbol, orderId, exchange });
+            try {
+                const result = await ccxtProvider.cancel(symbol, orderId, exchange);
+                logger.debug('Tool cancel result: %j', result);
+                return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+            } catch (error) {
+                logger.error('Error in cancel tool: %s', error);
+                return { content: [{ type: 'text', text: String(error) }], isError: true };
+            }
+        }
+    );
+    server.tool(
+        'cancelAll',
+        {
+            symbol: z.string().describe('Trading pair symbol, e.g., ETH/USDT, BTC/USDT'),
+            exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
+        },
+        async ({ symbol, exchange }: { symbol: string; exchange?: string }) => {
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
+            logger.debug('Tool cancelAll called with params: %j', { symbol, exchange });
+            try {
+                const result = await ccxtProvider.cancelAll(symbol, exchange);
+                logger.debug('Tool cancelAll result: %j', result);
+                return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
+            } catch (error) {
+                logger.error('Error in cancelAll tool: %s', error);
+                return { content: [{ type: 'text', text: String(error) }], isError: true };
+            }
+        }
+    );
+    server.tool(
+        'trades',
+        {
+            symbol: z.string().describe('Trading pair symbol, e.g., ETH/USDT, BTC/USDT'),
+            exchange: z.string().optional().describe('Exchange id, e.g., binance, okx, gate, etc.'),
+        },
+        async ({ symbol, exchange }: { symbol: string; exchange?: string }) => {
+            if (!exchange) logger.warn('No exchange specified, defaulting to binance.');
+            logger.debug('Tool trades called with params: %j', { symbol, exchange });
+            try {
+                const result = await ccxtProvider.trades(symbol, exchange);
+                if (!result) return { content: [{ type: 'text', text: 'No data.' }], isError: true };
+                const headers = [
+                    'Trade ID',
+                    'Order ID',
+                    'Symbol',
+                    'Side',
+                    'Price',
+                    'Amount',
+                    'Cost',
+                    'Fee',
+                    'Timestamp',
+                ];
+                const rows = result.map((t: any) => [
+                    t.id,
+                    t.orderId || '',
+                    t.symbol,
+                    t.side,
+                    t.price,
+                    t.amount,
+                    t.cost,
+                    t.fee ? `${t.fee.cost} ${t.fee.currency}` : '',
+                    t.timestamp,
+                ]);
+                logger.debug('Tool trades result: %j', result);
+                return { content: [{ type: 'text', text: toMarkdownTable(headers, rows) }] };
+            } catch (error) {
+                logger.error('Error in trades tool: %s', error);
+                return { content: [{ type: 'text', text: String(error) }], isError: true };
+            }
+        }
+    );
+
+    // Tool: Check all supported exchanges for API key/secret config
+    server.tool('checkExchangeConfigs', {}, async () => {
+        try {
+            const results = ccxtProvider.checkExchangeConfigs();
+            const headers = ['Exchange ID', 'Name', 'Ready', 'Error'];
+            const rows = results.map(r => [r.id, r.name, r.ready ? '✅' : '❌', r.error || '']);
+            logger.debug('Tool checkExchangeConfigs result: %j', results);
+            return { content: [{ type: 'text', text: toMarkdownTable(headers, rows) }] };
+        } catch (error) {
+            logger.error('Error in checkExchangeConfigs tool: %s', error);
+            return { content: [{ type: 'text', text: String(error) }], isError: true };
+        }
+    });
+
+    // Log analysis tool (basic)
+    server.tool(
+        'analyzeLogs',
+        {
+            date: z.string().describe('Log date: YYYY-MM-DD, "today", or "yesterday"'),
+        },
+        async ({ date }: { date: string }) => {
+            try {
+                logger.debug('Tool analyzeLogs called with params: %j', { date });
+                // Use globally imported LOG_DIR; avoid runtime require
+                if (!fs.existsSync(LOG_DIR)) {
+                    return {
+                        content: [{ type: 'text', text: `Log directory not found: ${LOG_DIR}` }],
+                        isError: true,
+                    };
+                }
+                let targetDate: string;
+                const today = dayjs();
+                if (!date || date === 'today') {
+                    targetDate = today.format('YYYY-MM-DD');
+                } else if (date === 'yesterday') {
+                    targetDate = today.subtract(1, 'day').format('YYYY-MM-DD');
+                } else {
+                    targetDate = date;
+                }
+                // Find the log file for the date (assume only one file per date, or pick the first if multiple)
+                const files = fs.readdirSync(LOG_DIR);
+                const logFile = files.find((f: string) => f.startsWith(targetDate));
+                if (!logFile) {
+                    return {
+                        content: [{ type: 'text', text: `No log file found for date: ${targetDate}` }],
+                        isError: true,
+                    };
+                }
+                const filePath = path.join(LOG_DIR, logFile);
+                const fileContent = fs.readFileSync(filePath, 'utf-8');
+                return {
+                    content: [{ type: 'text', text: fileContent }],
+                    isError: false,
+                };
+            } catch (err: any
