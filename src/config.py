@@ -101,6 +101,26 @@ def fallback_exchanges() -> tuple[str, ...]:
     return tuple(part.strip().lower() for part in raw.split(",") if part.strip())
 
 
+def proxy_url() -> str | None:
+    """Outbound HTTP(S) proxy for exchange requests, if one is configured.
+
+    ``CRYPTO_MCP_PROXY`` wins, then the conventional proxy variables so a
+    shell that already exports one also works for the server. CCXT's async
+    client does not read these on its own.
+    """
+    for name in (
+        "CRYPTO_MCP_PROXY",
+        "HTTPS_PROXY",
+        "https_proxy",
+        "HTTP_PROXY",
+        "http_proxy",
+    ):
+        value = os.environ.get(name)
+        if value and value.strip():
+            return value.strip()
+    return None
+
+
 def _positive_int(name: str, default: int, *, minimum: int) -> int:
     raw_value = os.environ.get(name, str(default))
     try:

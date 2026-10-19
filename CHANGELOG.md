@@ -12,6 +12,9 @@ intermediate `get_tickers` / `get_funding_rates` rankers are gone, replaced by
 
 ### Added
 
+- **Proxy support**: `CRYPTO_MCP_PROXY` (falling back to `HTTPS_PROXY` /
+  `HTTP_PROXY`) is applied to every CCXT async client, so the server works on
+  networks where exchange APIs are only reachable through a local proxy.
 - **Derivatives intelligence**: `get_funding_history` (with average, min/max and
   annualized carry), `get_open_interest` (snapshot or history), `get_basis`
   (spot versus perpetual plus funding carry, read from one venue) and

@@ -161,6 +161,11 @@ queries and multi-timeframe analysis run concurrently, and one failing venue is
 reported in place instead of failing the whole answer. Portfolio and trading
 calls never fail over.
 
+If exchange APIs are only reachable through a proxy, set `CRYPTO_MCP_PROXY`
+(e.g. `http://127.0.0.1:7890`). CCXT's async client does not read `HTTPS_PROXY`
+on its own, so the server applies it explicitly; the conventional
+`HTTPS_PROXY` / `HTTP_PROXY` variables are used when `CRYPTO_MCP_PROXY` is empty.
+
 ## Quick start
 
 ```bash

@@ -14,6 +14,7 @@ from config import (
     credentials_for,
     default_exchange,
     exchange_timeout_ms,
+    proxy_url,
 )
 from errors import CryptoMCPError, ErrorCode
 from resilience import retry_call, with_public_fallback
@@ -85,7 +86,12 @@ def _build_client(exchange_id: str, with_credentials: bool) -> ccxt.Exchange:
             config["secret"] = credentials.secret
             if credentials.password:
                 config["password"] = credentials.password
-    return exchange_class(config)
+    client = exchange_class(config)
+    proxy = proxy_url()
+    if proxy:
+        # CCXT's async client does not read proxy env vars by itself.
+        client.aiohttp_proxy = proxy
+    return client
 
 
 async def get_exchange(
