@@ -1,0 +1,138 @@
+{
+  "binance": {
+    "BTC/USDT": {
+      "symbol": "BTC/USDT",
+      "last": 67850.1,
+      "bid": 67849.8,
+      "ask": 67850.4,
+      "high": 68420.0,
+      "low": 66110.0,
+      "baseVolume": 31245.2,
+      "quoteVolume": 2110000000.0,
+      "change": 420.5,
+      "percentage": 0.62,
+      "timestamp": 1710000000000
+    },
+    "BTC/USDT:USDT": {
+      "symbol": "BTC/USDT:USDT",
+      "last": 67881.9,
+      "bid": 67881.5,
+      "ask": 67882.3,
+      "high": 68450.0,
+      "low": 66090.0,
+      "baseVolume": 51245.2,
+      "quoteVolume": 3420000000.0,
+      "change": 455.1,
+      "percentage": 0.68,
+      "timestamp": 1710000000000
+    },
+    "ETH/USDT": {
+      "symbol": "ETH/USDT",
+      "last": 3512.4,
+      "bid": 3512.3,
+      "ask": 3512.5,
+      "high": 3550.0,
+      "low": 3410.2,
+      "baseVolume": 355000.0,
+      "quoteVolume": 1250000000.0,
+      "change": 82.3,
+      "percentage": 2.4,
+      "timestamp": 1710000000000
+    },
+    "SOL/USDT": {
+      "symbol": "SOL/USDT",
+      "last": 178.35,
+      "bid": 178.33,
+      "ask": 178.37,
+      "high": 184.9,
+      "low": 176.1,
+      "baseVolume": 3590000.0,
+      "quoteVolume": 640000000.0,
+      "change": -5.7,
+      "percentage": -3.1,
+      "timestamp": 1710000000000
+    },
+    "DOGE/USDT": {
+      "symbol": "DOGE/USDT",
+      "last": 0.1623,
+      "bid": 0.16228,
+      "ask": 0.16232,
+      "high": 0.171,
+      "low": 0.1521,
+      "baseVolume": 1290000000.0,
+      "quoteVolume": 210000000.0,
+      "change": 0.0089,
+      "percentage": 5.8,
+      "timestamp": 1710000000000
+    },
+    "ETH/BTC": {
+      "symbol": "ETH/BTC",
+      "last": 0.05176,
+      "bid": 0.05175,
+      "ask": 0.05177,
+      "high": 0.0521,
+      "low": 0.0508,
+      "baseVolume": 182000.0,
+      "quoteVolume": 95000000.0,
+      "change": 0.0006,
+      "percentage": 1.1,
+      "timestamp": 1710000000000
+    }
+  },
+  "okx": {
+    "BTC/USDT": {
+      "symbol": "BTC/USDT",
+      "last": 67862.4,
+      "bid": 67861.9,
+      "ask": 67863.0,
+      "high": 68433.0,
+      "low": 66105.0,
+      "baseVolume": 18902.4,
+      "quoteVolume": 1280000000.0,
+      "change": 431.2,
+      "percentage": 0.64,
+      "timestamp": 1710000000000
+    },
+    "BTC/USDT:USDT": {
+      "symbol": "BTC/USDT:USDT",
+      "last": 67890.0,
+      "bid": 67889.5,
+      "ask": 67890.9,
+      "high": 68460.0,
+      "low": 66100.0,
+      "baseVolume": 22100.0,
+      "quoteVolume": 1500000000.0,
+      "change": 440.0,
+      "percentage": 0.65,
+      "timestamp": 1710000000000
+    }
+  },
+  "bybit": {
+    "BTC/USDT": {
+      "symbol": "BTC/USDT",
+      "last": 67845.0,
+      "bid": 67844.5,
+      "ask": 67845.6,
+      "high": 68400.0,
+      "low": 66080.0,
+      "baseVolume": 24100.0,
+      "quoteVolume": 1635000000.0,
+      "change": 410.0,
+      "percentage": 0.61,
+      "timestamp": 1710000000000
+    },
+    "BTC/USDT:USDT": {
+      "symbol": "BTC/USDT:USDT",
+      "last": 67870.5,
+      "bid": 67870.0,
+      "ask": 67871.2,
+      "high": 68430.0,
+      "low": 66070.0,
+      "baseVolume": 30200.0,
+      "quoteVolume": 2050000000.0,
+      "change": 425.0,
+      "percentage": 0.63,
+      "timestamp": 1710000000000
+    }
+  }
+}

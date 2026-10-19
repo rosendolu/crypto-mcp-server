@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "crypto-mcp-server": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/absolute/path/to/crypto-mcp-server",
+        "crypto-mcp-server"
+      ],
+      "env": {
+        "DEFAULT_EXCHANGE": "binance",
+        "PERMISSION_LEVEL": "analysis",
+        "ENABLE_TRADING": "false"
+      }
+    }
+  }
+}

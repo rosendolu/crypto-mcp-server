@@ -1,0 +1,65 @@
+[project]
+name = "crypto-mcp-server"
+version = "3.0.0"
+description = "Read-only cryptocurrency market data and technical analysis over stdio MCP."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+authors = [{ name = "rosendo" }]
+keywords = ["cryptocurrency", "mcp", "fastmcp", "ccxt", "technical-analysis"]
+dependencies = [
+    "fastmcp>=4.1.1,<5",
+    "ccxt>=4.4.0",
+    "pandas>=3.0.6",
+    "python-dotenv>=1.2.4",
+]
+
+[project.scripts]
+crypto-mcp-server = "main:main"
+
+[project.urls]
+Repository = "https://github.com/rosendolu/crypto-mcp-server"
+Changelog = "https://github.com/rosendolu/crypto-mcp-server/blob/main/CHANGELOG.md"
+Releases = "https://github.com/rosendolu/crypto-mcp-server/releases"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.17.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src"]
+sources = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+exclude = ["examples"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "config",
+    "errors",
+    "exchanges",
+    "formatting",
+    "indicators",
+    "permissions",
+    "resilience",
+    "server",
+    "symbols",
+    "tools",
+]

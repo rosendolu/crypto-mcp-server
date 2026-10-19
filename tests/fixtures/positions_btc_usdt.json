@@ -1,0 +1,55 @@
+{
+  "binance": [
+    {
+      "symbol": "BTC/USDT:USDT",
+      "id": "pos-btc",
+      "side": "long",
+      "contracts": 0.5,
+      "contractSize": 1.0,
+      "notional": 33925.05,
+      "leverage": 10.0,
+      "marginMode": "cross",
+      "entryPrice": 66000.0,
+      "markPrice": 67850.1,
+      "liquidationPrice": 59000.0,
+      "unrealizedPnl": 925.05,
+      "collateral": 3392.5,
+      "timestamp": 1709942400000,
+      "datetime": "2024-03-09T00:00:00.000Z"
+    },
+    {
+      "symbol": "ETH/USDT:USDT",
+      "id": "pos-eth",
+      "side": "short",
+      "contracts": 2.0,
+      "contractSize": 1.0,
+      "notional": 6400.0,
+      "leverage": 5.0,
+      "marginMode": "isolated",
+      "entryPrice": 3300.0,
+      "markPrice": 3200.0,
+      "liquidationPrice": 3900.0,
+      "unrealizedPnl": 200.0,
+      "collateral": 1280.0,
+      "timestamp": 1709942400000,
+      "datetime": "2024-03-09T00:00:00.000Z"
+    },
+    {
+      "symbol": "SOL/USDT:USDT",
+      "id": "pos-sol",
+      "side": "long",
+      "contracts": 0.0,
+      "contractSize": 1.0,
+      "notional": 0.0,
+      "leverage": 3.0,
+      "marginMode": "cross",
+      "entryPrice": 0.0,
+      "markPrice": 178.35,
+      "liquidationPrice": 0.0,
+      "unrealizedPnl": 0.0,
+      "collateral": 0.0,
+      "timestamp": 1709942400000,
+      "datetime": "2024-03-09T00:00:00.000Z"
+    }
+  ]
+}

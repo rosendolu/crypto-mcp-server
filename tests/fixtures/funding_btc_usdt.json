@@ -1,0 +1,50 @@
+{
+  "binance": {
+    "BTC/USDT:USDT": {
+      "symbol": "BTC/USDT:USDT",
+      "fundingRate": 0.0001,
+      "nextFundingTimestamp": 1710014400000,
+      "predictedFundingRate": 0.00012,
+      "interval": "8h"
+    },
+    "ETH/USDT:USDT": {
+      "symbol": "ETH/USDT:USDT",
+      "fundingRate": 0.0003,
+      "nextFundingTimestamp": 1710014400000,
+      "predictedFundingRate": 0.00031,
+      "interval": "8h"
+    },
+    "SOL/USDT:USDT": {
+      "symbol": "SOL/USDT:USDT",
+      "fundingRate": -0.0005,
+      "nextFundingTimestamp": 1710014400000,
+      "predictedFundingRate": -0.00045,
+      "interval": "8h"
+    },
+    "DOGE/USDT:USDT": {
+      "symbol": "DOGE/USDT:USDT",
+      "fundingRate": 0.0002,
+      "nextFundingTimestamp": 1710014400000,
+      "predictedFundingRate": 0.00021,
+      "interval": "8h"
+    }
+  },
+  "okx": {
+    "BTC/USDT:USDT": {
+      "symbol": "BTC/USDT:USDT",
+      "fundingRate": 0.00007,
+      "nextFundingTimestamp": 1710014400000,
+      "predictedFundingRate": 0.00009,
+      "interval": "8h"
+    }
+  },
+  "bybit": {
+    "BTC/USDT:USDT": {
+      "symbol": "BTC/USDT:USDT",
+      "fundingRate": 0.00005,
+      "nextFundingTimestamp": 1710014400000,
+      "predictedFundingRate": 0.00006,
+      "interval": "8h"
+    }
+  }
+}

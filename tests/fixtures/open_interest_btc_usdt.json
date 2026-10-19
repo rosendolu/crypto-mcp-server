@@ -1,0 +1,16 @@
+{
+  "binance": {
+    "symbol": "BTC/USDT:USDT",
+    "openInterestAmount": 81234.5,
+    "openInterestValue": 5512345678.0,
+    "timestamp": 1710000000000,
+    "datetime": "2024-03-09T16:00:00.000Z"
+  },
+  "okx": {
+    "symbol": "BTC/USDT:USDT",
+    "openInterestAmount": 42100.25,
+    "openInterestValue": 2859000000.0,
+    "timestamp": 1710000000000,
+    "datetime": "2024-03-09T16:00:00.000Z"
+  }
+}

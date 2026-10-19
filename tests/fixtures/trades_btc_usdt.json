@@ -1,0 +1,14 @@
+[
+  {
+    "timestamp": 1710000000000,
+    "side": "buy",
+    "price": 67850.1,
+    "amount": 0.12
+  },
+  {
+    "timestamp": 1710000001500,
+    "side": "sell",
+    "price": 67849.9,
+    "amount": 0.08
+  }
+]

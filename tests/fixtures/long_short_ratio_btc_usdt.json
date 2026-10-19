@@ -1,0 +1,28 @@
+{
+  "binance": [
+    {
+      "symbol": "BTC/USDT:USDT",
+      "longShortRatio": 1.09,
+      "timestamp": 1709856000000,
+      "datetime": "2024-03-08T00:00:00.000Z"
+    },
+    {
+      "symbol": "BTC/USDT:USDT",
+      "longShortRatio": 1.16,
+      "timestamp": 1709884800000,
+      "datetime": "2024-03-08T08:00:00.000Z"
+    },
+    {
+      "symbol": "BTC/USDT:USDT",
+      "longShortRatio": 1.24,
+      "timestamp": 1709913600000,
+      "datetime": "2024-03-08T16:00:00.000Z"
+    },
+    {
+      "symbol": "BTC/USDT:USDT",
+      "longShortRatio": 1.31,
+      "timestamp": 1709942400000,
+      "datetime": "2024-03-09T00:00:00.000Z"
+    }
+  ]
+}

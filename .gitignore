@@ -1,0 +1,21 @@
+# Node (legacy, kept for reference)
+node_modules/
+dist/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.uv/
+build/
+
+# Env / local
+.env
+*.local
+
+# OS / temp
+.DS_Store
+.temp/
+temp/
